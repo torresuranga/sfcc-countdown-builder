@@ -1386,6 +1386,16 @@
               <input type="text" id="expired-message" value="¡La promoción ha finalizado!" placeholder="Ej. ¡Empezó el mundial!">
               <p class="help-text">El texto que reemplazará al reloj cuando el tiempo llegue a cero.</p>
             </div>
+
+            <div class="divider" style="margin: 16px 0 12px 0;"></div>
+
+            <div class="switch-group" style="margin-bottom: 0;">
+              <label for="simulate-expired" style="margin-bottom: 0;">Simular Estado Expirado</label>
+              <label class="switch">
+                <input type="checkbox" id="simulate-expired">
+                <span class="slider"></span>
+              </label>
+            </div>
           </div>
         </div>
 
@@ -2695,6 +2705,16 @@ Countdown ends: ${config.endDateStr} Z
       // Update highlighter overlay
       document.getElementById('code-overlay').innerHTML = highlightHTML(code);
 
+      // Generate preview code (with simulated expired date if toggle is checked)
+      let previewCode = code;
+      const simulateExpired = document.getElementById('simulate-expired').checked;
+      if (simulateExpired) {
+        previewCode = previewCode.replace(
+          /data-countdown-end="[^"]*"/,
+          'data-countdown-end="1970-01-01T00:00:00.000Z"'
+        );
+      }
+
       // Write into Preview iframe
       const iframe = document.getElementById('preview-frame');
       const doc = iframe.contentDocument || iframe.contentWindow.document;
@@ -2725,7 +2745,7 @@ Countdown ends: ${config.endDateStr} Z
 </head>
 <body>
   <div class="preview-wrapper">
-    ${code}
+    ${previewCode}
   </div>
 </body>
 </html>`;
@@ -2866,6 +2886,9 @@ Countdown ends: ${config.endDateStr} Z
       inputs.forEach(id => {
         document.getElementById(id).addEventListener('input', triggerUpdate);
       });
+
+      // Expired state simulation toggle listener
+      document.getElementById('simulate-expired').addEventListener('change', triggerUpdate);
 
       // Template switches
       document.getElementById('tmpl-title').addEventListener('change', () => {
