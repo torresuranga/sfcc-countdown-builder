@@ -4,3 +4,8 @@ node_modules/
 Thumbs.db
 *.log
 *.tmp
+
+# Ignorar carpetas locales ajenas al customizador
+email-timer-serverless/
+sfcc-component/
+sfcc-content-asset/
