@@ -864,9 +864,186 @@
       font-weight: bold;
       font-size: 0.8rem;
     }
+
+    /* Security Protection Overlay */
+    .security-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(4, 6, 10, 0.88);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 1;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .security-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .security-card {
+      background: rgba(17, 24, 39, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 40px;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      position: relative;
+      transform: translateY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .security-card.shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    .security-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px auto;
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
+    }
+
+    .security-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(to right, #fff, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .security-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+
+    .security-input-wrapper {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .security-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 12px 42px 12px 16px;
+      color: var(--text-main);
+      font-size: 1.1rem;
+      outline: none;
+      text-align: center;
+      letter-spacing: 0.15em;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .security-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .security-toggle-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: 0;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+
+    .security-toggle-btn:hover {
+      color: var(--text-main);
+    }
+
+    .security-btn {
+      width: 100%;
+      background: var(--accent-gradient);
+      color: #fff;
+      border: 0;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .security-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .security-error {
+      color: #ef4444;
+      font-size: 0.82rem;
+      margin-top: 12px;
+      display: none;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Security Access Lock Overlay -->
+  <div id="security-overlay" class="security-overlay">
+    <div id="security-card" class="security-card">
+      <div class="security-icon">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+        </svg>
+      </div>
+      <h2 class="security-title">Acceso Restringido</h2>
+      <p class="security-desc">Introduce la clave de acceso de seguridad para ingresar al constructor de cuenta regresiva.</p>
+      
+      <div class="security-input-wrapper">
+        <input type="password" id="security-passcode" class="security-input" placeholder="••••••••" onkeydown="if(event.key === 'Enter') submitPasscode()">
+        <button type="button" id="security-toggle-btn" class="security-toggle-btn" onclick="togglePasswordVisibility()">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <button type="button" class="security-btn" onclick="submitPasscode()">Ingresar</button>
+      <div id="security-error" class="security-error">Código incorrecto. Intenta de nuevo.</div>
+    </div>
+  </div>
 
   <!-- Toast Notification -->
   <div id="toast" class="toast">
@@ -1189,6 +1366,77 @@
   </div>
 
   <script>
+    // ==========================================
+    // CONFIGURACIÓN DE SEGURIDAD (GitHub Pages)
+    // ==========================================
+    // Cambia este código de acceso por el que desees utilizar
+    const ACCESS_CODE = 'Solu2026';
+
+    function checkSecurityAccess() {
+      if (sessionStorage.getItem('countdown_customizer_authorized') === 'true') {
+        const overlay = document.getElementById('security-overlay');
+        if (overlay) {
+          overlay.classList.add('hidden');
+        }
+        return;
+      }
+      // Focus on password input once loading completes
+      setTimeout(() => {
+        const input = document.getElementById('security-passcode');
+        if (input) input.focus();
+      }, 200);
+    }
+
+    function submitPasscode() {
+      const input = document.getElementById('security-passcode');
+      const errorMsg = document.getElementById('security-error');
+      const card = document.getElementById('security-card');
+      const value = input.value.trim();
+
+      if (value === ACCESS_CODE) {
+        sessionStorage.setItem('countdown_customizer_authorized', 'true');
+        const overlay = document.getElementById('security-overlay');
+        if (overlay) {
+          overlay.classList.add('hidden');
+        }
+        if (errorMsg) errorMsg.style.display = 'none';
+      } else {
+        // Show error and shake card
+        if (errorMsg) errorMsg.style.display = 'block';
+        if (card) {
+          card.classList.add('shake');
+          setTimeout(() => {
+            card.classList.remove('shake');
+          }, 400);
+        }
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    function togglePasswordVisibility() {
+      const input = document.getElementById('security-passcode');
+      const btn = document.getElementById('security-toggle-btn');
+      if (input && btn) {
+        if (input.type === 'password') {
+          input.type = 'text';
+          btn.innerHTML = `
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path>
+            </svg>
+          `;
+        } else {
+          input.type = 'password';
+          btn.innerHTML = `
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+            </svg>
+          `;
+        }
+      }
+    }
+
     // Templates as JS Functions
     function generateCodeWithTitle(config) {
       return `<!--
@@ -2381,6 +2629,9 @@ Countdown ends: ${config.endDateStr} Z
 
     // DOM Setup and listeners
     window.addEventListener('DOMContentLoaded', () => {
+      // Check for security access check first
+      checkSecurityAccess();
+
       setInitialDate();
       
       // Attach listeners to input changes
