@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SFCC Countdown Customizer & Previewer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #080b11;
+      --card-bg: rgba(17, 24, 39, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+      --success: #10b981;
+      --sidebar-width: 450px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-color);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: rgba(8, 11, 17, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      flex-shrink: 0;
+    }
+
+    .header-main-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-badge {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+      letter-spacing: 0.05em;
+    }
+
+    .header-title-area h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #fff, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-title-area p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    /* Branded Header Widget */
+    .header-branding-area {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 8px 18px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .brand-divider {
+      width: 1px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .presets-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .presets-sidebar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .presets-sidebar-grid .preset-btn {
+      width: 100%;
+      text-align: center;
+      padding: 8px;
+      border-radius: 8px;
+    }
+
+    .presets-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .preset-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .preset-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* Collapsible Cards Styling */
+    .collapsible-card {
+      overflow: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .collapsible-card .section-title {
+      margin-bottom: 0;
+    }
+
+    .chevron-icon {
+      color: var(--text-muted);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .collapsible-card.collapsed .chevron-icon {
+      transform: rotate(-180deg);
+    }
+
+    .card-content {
+      max-height: 1200px;
+      opacity: 1;
+      overflow: visible;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin-top 0.3s ease;
+      margin-top: 16px;
+    }
+
+    .collapsible-card.collapsed .card-content {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .main-layout {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Form / Sidebar controls */
+    .sidebar {
+      width: var(--sidebar-width);
+      border-right: 1px solid var(--card-border);
+      background: rgba(11, 15, 25, 0.6);
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .sidebar-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .sidebar-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .sidebar-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .sidebar-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    input[type="text"],
+    input[type="datetime-local"],
+    select {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="datetime-local"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Color Pickers wrapper */
+    .color-picker-wrapper {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .color-preview-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .color-preview-box input[type="color"] {
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      width: 50px;
+      height: 50px;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    /* File upload */
+    .file-input-wrapper {
+      position: relative;
+      margin-top: 8px;
+    }
+    
+    .file-label-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-main);
+      width: 100%;
+      justify-content: center;
+    }
+
+    .file-label-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent);
+    }
+
+    .file-label-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* Template Radio Buttons */
+    .template-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+    }
+
+    .template-option {
+      position: relative;
+    }
+
+    .template-option input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .template-option label {
+      display: block;
+      text-align: center;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin: 0;
+      transition: all 0.2s ease;
+      color: var(--text-muted);
+    }
+
+    .template-option input:checked + label {
+      background: var(--accent-gradient);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Preview and Code Workspace */
+    .workspace {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: #0d111a;
+      position: relative;
+    }
+
+    /* Device simulator switcher */
+    .device-switcher {
+      background: rgba(17, 24, 39, 0.6);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .device-btns {
+      display: flex;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 3px;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+    }
+
+    .device-btn {
+      background: transparent;
+      border: 0;
+      color: var(--text-muted);
+      padding: 6px 16px;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .device-btn.active {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
+    }
+
+    .device-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .preview-info {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Preview area containing simulated device iframe */
+    .preview-area {
+      flex: 1;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+      position: relative;
+    }
+
+    .device-frame-container {
+      width: 100%;
+      max-width: 100%;
+      height: fit-content;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--card-border);
+      background: #1e293b;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .device-header {
+      background: rgba(30, 41, 59, 0.9);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+
+    .device-title {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-family: monospace;
+      margin-left: 10px;
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    .preview-iframe {
+      width: 100%;
+      height: 250px;
+      border: 0;
+      background: #111;
+      display: block;
+      transition: height 0.2s ease;
+    }
+
+    /* Code area containing the generated code */
+    .code-section {
+      height: 280px;
+      border-top: 1px solid var(--card-border);
+      background: #090d16;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-header {
+      background: rgba(15, 23, 42, 0.8);
+      border-bottom: 1px solid var(--card-border);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .code-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .code-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent);
+    }
+
+    .action-btn.primary {
+      background: var(--accent-gradient);
+      border: 0;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    }
+
+    .action-btn.primary:hover {
+      opacity: 0.95;
+      transform: translateY(-0.5px);
+    }
+
+    .code-editor-wrapper {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      margin: 0 24px 16px 24px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      background: #030508;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-textarea {
+      width: 100%;
+      height: 100%;
+      background: #030508;
+      border: 0;
+      color: #9cdcfe;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 0.85rem;
+      padding: 16px;
+      resize: none;
+      outline: none;
+      line-height: 1.5;
+    }
+
+    .code-pre-highlight {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 16px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      pointer-events: none;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      background: #030508;
+      color: #cbd5e1;
+    }
+
+    /* Basic token highlights */
+    .token-comment    { color: #6a9955; }
+    .token-tag        { color: #569cd6; }
+    .token-attr-name  { color: #9cdcfe; }
+    .token-attr-value { color: #ce9178; }
+    .token-string     { color: #ce9178; }
+    .token-keyword    { color: #c586c0; }
+    .token-number     { color: #b5cea8; }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: var(--card-border);
+      margin: 16px 0;
+    }
+
+    /* Helper info */
+    .help-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* Glass Card styling */
+    .glass-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    /* Custom check switch */
+    .switch-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    
+    .switch-group label {
+      margin-bottom: 0;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255,255,255,0.1);
+      transition: .4s;
+      border-radius: 24px;
+      border: 1px solid var(--card-border);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Copy toast notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--success);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .preset-btn.reset-btn:hover {
+      background: rgba(239, 68, 68, 0.15) !important;
+      border-color: #ef4444 !important;
+      color: #ffffff !important;
+    }
+
+    /* Sidebar Branded Footer */
+    .sidebar-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--card-border);
+      background: rgba(6, 8, 14, 0.95);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .developer-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    
+    .developer-info span:first-child {
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+    
+    .dev-link {
+      color: #818cf8; /* Soft Indigo */
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .dev-link:hover {
+      color: #a5b4fc;
+      text-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+    }
+    
+    .dev-link svg {
+      opacity: 0.7;
+      transition: transform 0.2s ease;
+    }
+    
+    .dev-link:hover svg {
+      opacity: 1;
+      transform: translate(1px, -1px);
+    }
+    
+    .dev-role {
+      font-size: 0.65rem !important;
+      color: var(--text-muted) !important;
+      font-weight: 400;
+    }
+    
+    .brand-logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+    }
+    
+    .brand-label {
+      color: var(--text-muted);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    
+    .brand-logo {
+      height: 20px;
+      width: auto;
+      opacity: 0.85;
+      transition: all 0.2s ease;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+    
+    .brand-logo:hover {
+      opacity: 1;
+      filter: drop-shadow(0 2px 8px rgba(99, 102, 241, 0.2));
+    }
+
+    /* Editor Tabs Styling */
+    .editor-tabs {
+      background: #0d111a;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      font-size: 0.75rem;
+      user-select: none;
+    }
+    
+    .editor-tab {
+      padding: 8px 16px;
+      background: #030508;
+      color: var(--text-main);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      cursor: default;
+    }
+    
+    .tab-icon {
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <span id="toast-message">¡Copiado con éxito!</span>
+  </div>
+
+  <header>
+    <div class="header-title-area">
+      <div class="header-main-row">
+        <h1>
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+          </svg>
+          SFCC Countdown Builder
+        </h1>
+        <div class="header-badge">v1.2</div>
+      </div>
+      <p>Customiza, previsualiza y exporta módulos de cuenta regresiva en segundos</p>
+    </div>
+    
+    <!-- Header Right: Branded Identity -->
+    <div class="header-branding-area">
+      <div class="developer-info">
+        <span>Desarrollado por</span>
+        <a href="https://www.linkedin.com/in/torresuranga/" target="_blank" class="dev-link">
+          Carlos Torres
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+        <span class="dev-role">Salesforce Marketing Cloud Specialist</span>
+      </div>
+      <div class="brand-divider"></div>
+      <div class="brand-logo-container">
+        <span class="brand-label">Para</span>
+        <img src="https://image.grupodabra.com/lib/fe37157175640478731176/m/1/f39e000f-2e8b-40b2-9e37-d2571fb6616b.png" class="brand-logo" alt="Solu Logo">
+      </div>
+    </div>
+  </header>
+
+  <div class="main-layout">
+    
+    <!-- Sidebar form controls -->
+    <aside class="sidebar">
+      <div class="sidebar-scroll">
+        
+        <!-- Sección Presets y Acciones -->
+        <div class="glass-card collapsible-card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <div class="section-title">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+              </svg>
+              Presets de Campaña
+            </div>
+            <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="presets-sidebar-grid">
+              <button class="preset-btn" onclick="loadPreset('mundial')">Dexter Mundial</button>
+              <button class="preset-btn" onclick="loadPreset('hotsale')">Hot Sale Naranja</button>
+              <button class="preset-btn" onclick="loadPreset('blackfriday')">Black Friday</button>
+              <button class="preset-btn" onclick="loadPreset('cyber')">Cyber Neon</button>
+            </div>
+            <div class="divider" style="margin: 12px 0;"></div>
+            <button class="preset-btn reset-btn" onclick="resetToOriginal()" style="width: 100%; border-color: rgba(239, 68, 68, 0.4); color: #f87171; background: rgba(239, 68, 68, 0.05); margin-top: 4px; padding: 10px; border-radius: 8px;">Restablecer Configuración ↺</button>
+          </div>
+        </div>
+        
+        <!-- Sección Plantilla -->
+        <div class="glass-card collapsible-card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <div class="section-title">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+              </svg>
+              1. Tipo de Plantilla
+            </div>
+            <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="form-group">
+              <div class="template-selector">
+                <div class="template-option">
+                  <input type="radio" id="tmpl-title" name="template" value="title" checked>
+                  <label for="tmpl-title">Con Título</label>
+                </div>
+                <div class="template-option">
+                  <input type="radio" id="tmpl-clean" name="template" value="clean">
+                  <label for="tmpl-clean">Limpio (Solo Reloj)</label>
+                </div>
+              </div>
+              <p class="help-text">El tipo 'Con Título' incluye un título de cabecera con sombras sobre la imagen. La versión 'Limpia' es solo el contador flotando.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuración de Tiempos -->
+        <div class="glass-card collapsible-card">
+          <div class="card-header" onclick="toggleCard(this)">
+            <div class="section-title">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              2. Tiempo y Estado Final
+            </div>
+            <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="form-group">
+              <label for="end-date">Fecha y Hora de Finalización</label>
+              <input type="datetime-local" id="end-date" required>
+              <p class="help-text">Define cuándo terminará el contador. Se generará en formato ISO (UTC / Z) automáticamente.</p>
+            </div>
+
+            <div class="form-group">
+              <label for="expired-message">Mensaje al Expirar</label>
+              <input type="text" id="expired-message" value="¡La promoción ha finalizado!" placeholder="Ej. ¡Empezó el mundial!">
+              <p class="help-text">El texto que reemplazará al reloj cuando el tiempo llegue a cero.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contenido y Enlaces -->
+        <div class="glass-card collapsible-card collapsed">
+          <div class="card-header" onclick="toggleCard(this)">
+            <div class="section-title">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+              </svg>
+              3. Imagen y Enlace de Destino
+            </div>
+            <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="form-group" id="title-text-group">
+              <label for="title-text">Título del Banner</label>
+              <input type="text" id="title-text" value="¡YA LLEGA EL MUNDIAL!" placeholder="Ej. ¡HOT SALE!">
+            </div>
+
+            <div class="form-group">
+              <label for="bg-image-url">URL de Imagen de Fondo</label>
+              <input type="text" id="bg-image-url" value="https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png">
+              <div class="file-input-wrapper">
+                <span class="file-label-btn">
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                  </svg>
+                  Cargar imagen local para previsualizar
+                </span>
+                <input type="file" id="local-image" accept="image/*" onchange="handleLocalImage(this)">
+              </div>
+              <p class="help-text">Introduce la URL absoluta de tu librería de SFCC/Cloudinary, o sube una temporal para visualizarla en vivo.</p>
+            </div>
+
+            <div class="form-group">
+              <label for="link-url">URL Destino (Link)</label>
+              <input type="text" id="link-url" value="/mundial" placeholder="Ej. /hotsale o https://www.dexter.com.ar/...">
+            </div>
+
+            <div class="form-row">
+              <div>
+                <label for="utm-campaign">Campaña (Campaign)</label>
+                <input type="text" id="utm-campaign" value="mundial-2026-dexter">
+              </div>
+              <div>
+                <label for="utm-source">Origen (Source)</label>
+                <input type="text" id="utm-source" value="banner-countdown">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="utm-medium">Medio (Medium)</label>
+              <input type="text" id="utm-medium" value="web">
+            </div>
+          </div>
+        </div>
+
+        <!-- Diseño y Colores -->
+        <div class="glass-card collapsible-card collapsed">
+          <div class="card-header" onclick="toggleCard(this)">
+            <div class="section-title">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+              </svg>
+              4. Estilos y Colores
+            </div>
+            <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="form-group">
+              <label>Color de Caja de Dígito</label>
+              <div class="color-picker-wrapper">
+                <div class="color-preview-box" id="digit-bg-preview" style="background-color: #333333;">
+                  <input type="color" id="color-digit-bg" value="#333333" oninput="updateColorText(this, 'txt-digit-bg')">
+                </div>
+                <input type="text" id="txt-digit-bg" value="#333333" maxlength="7" oninput="updateColorPicker(this, 'color-digit-bg')">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Color del Dígito (Texto)</label>
+              <div class="color-picker-wrapper">
+                <div class="color-preview-box" id="digit-color-preview" style="background-color: #ffffff;">
+                  <input type="color" id="color-digit-txt" value="#ffffff" oninput="updateColorText(this, 'txt-digit-txt')">
+                </div>
+                <input type="text" id="txt-digit-txt" value="#ffffff" maxlength="7" oninput="updateColorPicker(this, 'color-digit-txt')">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Color de Separadores y Etiquetas</label>
+              <div class="color-picker-wrapper">
+                <div class="color-preview-box" id="labels-color-preview" style="background-color: #ffffff;">
+                  <input type="color" id="color-labels" value="#ffffff" oninput="updateColorText(this, 'txt-labels')">
+                </div>
+                <input type="text" id="txt-labels" value="#ffffff" maxlength="7" oninput="updateColorPicker(this, 'color-labels')">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- Workspace preview & output -->
+    <main class="workspace">
+      
+      <!-- Device switcher bar -->
+      <div class="device-switcher">
+        <div class="preview-info">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+          </svg>
+          Vista Previa en Tiempo Real
+        </div>
+        <div class="device-btns">
+          <button class="device-btn active" onclick="setDeviceWidth('100%', this)">
+            💻 Desktop (100%)
+          </button>
+          <button class="device-btn" onclick="setDeviceWidth('768px', this)">
+            📱 Tablet (768px)
+          </button>
+          <button class="device-btn" onclick="setDeviceWidth('375px', this)">
+            📱 Mobile (375px)
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview Screen Area -->
+      <div class="preview-area">
+        <div class="device-frame-container" id="device-frame" style="width: 100%;">
+          <div class="device-header">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <div class="device-title" id="device-url-display">sfcc-preview-sandbox.html</div>
+          </div>
+          <!-- Sandbox Iframe for isolated CSS/JS running -->
+          <iframe id="preview-frame" class="preview-iframe"></iframe>
+        </div>
+      </div>
+
+      <!-- Code generation section -->
+      <div class="code-section">
+        <div class="code-header">
+          <div class="code-title">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+            </svg>
+            Código HTML Generado (Listo para SFCC)
+          </div>
+          <div class="code-actions">
+            <button class="action-btn" onclick="downloadCode()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+              </svg>
+              Descargar Archivo
+            </button>
+            <button class="action-btn primary" id="copy-btn" onclick="copyCode()">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+              </svg>
+              Copiar Código
+            </button>
+          </div>
+        </div>
+        <div class="code-editor-wrapper">
+          <div class="editor-tabs">
+            <div class="editor-tab active">
+              <span class="tab-icon" style="color: #e34c26;">&lt;/&gt;</span>
+              sfcc-countdown-asset.html
+            </div>
+          </div>
+          <div class="code-editor-inner" style="flex: 1; position: relative; overflow: hidden;">
+            <textarea id="output-code" class="code-textarea" readonly></textarea>
+            <div id="code-overlay" class="code-pre-highlight"></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script>
+    // Templates as JS Functions
+    function generateCodeWithTitle(config) {
+      return `<!--
+Brand: Custom Countdown
+Version: Dynamic Generation
+Countdown ends: ${config.endDateStr} Z
+-->
+<div class="countdown-container" data-countdown-end="${config.isoDate}">
+  <a class="countdown-link" 
+     data-campaign="${config.campaign}" 
+     data-medium="${config.medium}" 
+     data-source="${config.source}" 
+     data-url="${config.linkUrl}" 
+     style="text-decoration: none; color: inherit; display: block; width: 100%; height: 100%;">
+    
+    <img src="${config.bgImage}" class="countdown-bg-img" alt="Banner del Contador">
+    
+    <div class="countdown-timer-wrapper">
+      <h2 class="countdown-title">${config.titleText}</h2>
+      <div class="timer-digits-row">
+        <div class="time-group">
+          <span class="time-label">D&iacute;as</span>
+          <div class="time-digits">
+            <span class="time-digit" data-countdown-d0>0</span>
+            <span class="time-digit" data-countdown-d1>0</span>
+          </div>
+        </div>
+        <span class="time-sep">:</span>
+
+        <div class="time-group">
+          <span class="time-label">Horas</span>
+          <div class="time-digits">
+            <span class="time-digit" data-countdown-h0>0</span>
+            <span class="time-digit" data-countdown-h1>0</span>
+          </div>
+        </div>
+        <span class="time-sep">:</span>
+
+        <div class="time-group">
+          <span class="time-label">Minutos</span>
+          <div class="time-digits">
+            <span class="time-digit" data-countdown-m0>0</span>
+            <span class="time-digit" data-countdown-m1>0</span>
+          </div>
+        </div>
+        <span class="time-sep">:</span>
+
+        <div class="time-group">
+          <span class="time-label">Segundos</span>
+          <div class="time-digits">
+            <span class="time-digit" data-countdown-s0>0</span>
+            <span class="time-digit" data-countdown-s1>0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+
+<style type="text/css">
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700;900&display=swap');
+
+  .countdown-container {
+    --digit-box-bg: ${config.digitBgColor};
+    --digit-color: ${config.digitTxtColor};
+    --label-color: ${config.labelsColor};
+    --sep-color: ${config.labelsColor};
+    
+    --digit-size:      clamp(12px, 3.3vw, 48px);
+    --label-size:      clamp(7px, 1vw, 14px);
+    --sep-size:        clamp(10px, 2.5vw, 36px);
+    --box-w:          clamp(14px, 3.7vw, 53px);
+    --box-h:          clamp(20px, 5.5vw, 80px);
+    --box-radius:      clamp(2px, 0.55vw, 8px);
+    --box-gap:        clamp(1px, 0.28vw, 4px);
+    --group-gap:      clamp(4px, 1.25vw, 18px);
+    --sep-margin-bottom: clamp(1px, 0.7vw, 10px);
+    --label-gap:      clamp(2px, 0.4vw, 6px);
+    --title-gap:      clamp(6px, 1.5vw, 15px);
+    --timer-top:      50%;
+    --timer-left:     50%;
+    
+    position:        relative;
+    width:           100%;
+    overflow:        hidden;
+    font-family:     'Roboto', Arial, sans-serif;
+    display:         block;
+    line-height:     0;
+    box-sizing:      border-box;
+  }
+
+  .countdown-title,
+  .time-label,
+  .time-digit,
+  .time-sep,
+  .countdown-expired {
+    font-family: 'Roboto', Arial, sans-serif !important;
+  }
+
+  @supports (width: 1cqw) {
+    .countdown-container {
+      container-type: inline-size;
+      --digit-size:      clamp(12px, 3.3cqw, 48px);
+      --label-size:      clamp(7px, 1cqw, 14px);
+      --sep-size:        clamp(10px, 2.5cqw, 36px);
+      --box-w:          clamp(14px, 3.7cqw, 53px);
+      --box-h:          clamp(20px, 5.5cqw, 80px);
+      --box-radius:      clamp(2px, 0.55cqw, 8px);
+      --box-gap:        clamp(1px, 0.28cqw, 4px);
+      --group-gap:      clamp(4px, 1.25cqw, 18px);
+      --sep-margin-bottom: clamp(1px, 0.7cqw, 10px);
+      --label-gap:      clamp(2px, 0.4cqw, 6px);
+      --title-gap:      clamp(6px, 1.5cqw, 15px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .countdown-container {
+      --digit-size:      clamp(10px, 2.2vw, 20px);
+      --label-size:      clamp(6px, 1.1vw, 8px);
+      --sep-size:        clamp(8px, 1.8vw, 14px);
+      --box-w:          clamp(12px, 2.8vw, 24px);
+      --box-h:          clamp(16px, 4vw, 34px);
+      --box-radius:      clamp(1px, 0.4vw, 3px);
+      --box-gap:        clamp(1px, 0.2vw, 2px);
+      --group-gap:      clamp(3px, 0.8vw, 8px);
+      --sep-margin-bottom: clamp(1px, 0.3vw, 4px);
+      --label-gap:      clamp(1px, 0.2vw, 2px);
+      --title-gap:      clamp(3px, 0.8vw, 6px);
+      
+      --timer-top:      48%;
+      --timer-left:     50%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    @supports (width: 1cqw) {
+      .countdown-container {
+        --digit-size:      clamp(10px, 2.2cqw, 20px);
+        --label-size:      clamp(6px, 1.1cqw, 8px);
+        --sep-size:        clamp(8px, 1.8cqw, 14px);
+        --box-w:          clamp(12px, 2.8cqw, 24px);
+        --box-h:          clamp(16px, 4cqw, 34px);
+        --box-radius:      clamp(1px, 0.4cqw, 3px);
+        --box-gap:        clamp(1px, 0.2cqw, 2px);
+        --group-gap:      clamp(3px, 0.8cqw, 8px);
+        --sep-margin-bottom: clamp(1px, 0.3cqw, 4px);
+        --label-gap:      clamp(1px, 0.2cqw, 2px);
+        --title-gap:      clamp(3px, 0.8cqw, 6px);
+      }
+    }
+  }
+
+  .countdown-bg-img {
+    width:           100%;
+    height:          auto;
+    display:         block;
+  }
+
+  .countdown-timer-wrapper {
+    position:        absolute;
+    top:             var(--timer-top, 50%);
+    left:            var(--timer-left, 50%);
+    transform:       translate(-50%, -50%);
+    display:         flex !important;
+    flex-direction:  column !important;
+    align-items:     center !important;
+    gap:             var(--title-gap) !important;
+    width:           100%;
+    pointer-events:  none;
+  }
+
+  .countdown-timer-wrapper * {
+    pointer-events:  auto;
+  }
+
+  .countdown-title {
+    font-size:       clamp(12px, 2.2vw, 24px) !important;
+    font-weight:     900 !important;
+    color:           var(--label-color) !important;
+    text-transform:  uppercase !important;
+    letter-spacing:  0.08em !important;
+    margin:          0 !important;
+    line-height:     1.1 !important;
+    text-shadow:     0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    white-space:     nowrap !important;
+  }
+
+  @supports (width: 1cqw) {
+    .countdown-title {
+      font-size:     clamp(12px, 2.2cqw, 24px) !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .countdown-title {
+      font-size:     clamp(9px, 2.2vw, 15px) !important;
+      letter-spacing: 1px !important;
+    }
+  }
+
+  .timer-digits-row {
+    display:         flex !important;
+    flex-direction:  row !important;
+    align-items:     center !important;
+    gap:             var(--group-gap) !important;
+  }
+
+  .time-group {
+    display:         flex !important;
+    flex-direction:  column !important;
+    align-items:     center !important;
+    gap:             var(--label-gap) !important;
+  }
+
+  .time-label {
+    font-size:       var(--label-size);
+    font-weight:     700;
+    color:           var(--label-color);
+    text-transform:  uppercase;
+    letter-spacing:  0.5px;
+    white-space:     nowrap;
+    line-height:     1;
+  }
+
+  .time-digits {
+    display:         flex !important;
+    flex-direction:  row !important;
+    gap:             var(--box-gap) !important;
+  }
+
+  .time-digit {
+    width:           var(--box-w) !important;
+    height:          var(--box-h) !important;
+    background:      var(--digit-box-bg) !important;
+    border-radius:   var(--box-radius) !important;
+    display:         inline-flex !important;
+    align-items:     center !important;
+    justify-content: center !important;
+    font-size:       var(--digit-size) !important;
+    font-weight:     700;
+    color:           var(--digit-color) !important;
+    font-variant-numeric: tabular-nums !important;
+    line-height:     1 !important;
+    transition:      transform 0.1s ease !important;
+    box-shadow:      0 clamp(2px, 0.3vw, 4px) clamp(3px, 0.4vw, 6px) rgba(0, 0, 0, 0.15) !important;
+  }
+
+  @supports (width: 1cqw) {
+    .time-digit {
+      box-shadow:    0 clamp(2px, 0.3cqw, 4px) clamp(3px, 0.4cqw, 6px) rgba(0, 0, 0, 0.15) !important;
+    }
+  }
+
+  .time-digit.flip {
+    transform:       scale(0.88) !important;
+  }
+
+  .time-sep {
+    font-size:       var(--sep-size);
+    font-weight:     700;
+    color:           var(--sep-color);
+    align-self:      flex-end;
+    margin-bottom:   var(--sep-margin-bottom);
+    line-height:     1;
+    opacity:         0.9;
+    animation:       timeBlink 1s step-end infinite;
+  }
+
+  @keyframes timeBlink {
+    0%, 100% { opacity: 0.9; }
+    50%       { opacity: 0.3; }
+  }
+
+  .countdown-expired {
+    font-size:       clamp(1.2rem, 3vw, 1.8rem);
+    font-weight:     700;
+    color:           #ffffff;
+    white-space:     nowrap;
+    text-shadow:     0 2px 8px rgba(0,0,0,0.5);
+    margin:          0;
+  }
+</style>
+
+<script>
+  (function() {
+    'use strict';
+
+    let sibling = document.currentScript.previousElementSibling;
+    while (sibling && !sibling.classList.contains('countdown-container')) {
+      sibling = sibling.previousElementSibling;
+    }
+    const container = sibling;
+    if (!container) return;
+
+    const countdownDate = new Date(container.getAttribute('data-countdown-end')).getTime();
+
+    function setupTrackingLinks() {
+      const links = container.querySelectorAll('.countdown-link');
+
+      links.forEach(function(link) {
+        const baseUrl = link.getAttribute('data-url') || '/';
+        const campaign = link.getAttribute('data-campaign') || 'mundial-2026';
+        const source = link.getAttribute('data-source') || 'banner-countdown';
+        const medium = link.getAttribute('data-medium') || 'web';
+
+        const separator = baseUrl.indexOf('?') !== -1 ? '&' : '?';
+        const utmParams = 'utm_source=' + encodeURIComponent(source) +
+                        '&utm_medium=' + encodeURIComponent(medium) +
+                        '&utm_campaign=' + encodeURIComponent(campaign) +
+                        '&utm_content=countdown-timer';
+
+        link.href = baseUrl + separator + utmParams;
+
+        link.addEventListener('click', function() {
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'countdown_click', {
+              event_category: 'engagement',
+              event_label: campaign,
+              campaign_name: campaign,
+              source: source,
+              medium: medium
+            });
+          }
+
+          if (typeof ga !== 'undefined') {
+            ga('send', 'event', 'Countdown', 'Click', campaign);
+          }
+        });
+      });
+    }
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = countdownDate - now;
+
+      if (distance <= 0 || isNaN(distance)) {
+        const timerWrapper = container.querySelector('.countdown-timer-wrapper');
+        if (timerWrapper) {
+          timerWrapper.innerHTML = '';
+          const message = document.createElement('p');
+          message.className = 'countdown-expired';
+          message.textContent = '${config.expiredMsg}';
+          timerWrapper.appendChild(message);
+        }
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      const d = String(days).padStart(2, '0');
+      const h = String(hours).padStart(2, '0');
+      const m = String(minutes).padStart(2, '0');
+      const s = String(seconds).padStart(2, '0');
+
+      const digits = {
+        '[data-countdown-d0]': d.charAt(0),
+        '[data-countdown-d1]': d.charAt(1),
+        '[data-countdown-h0]': h.charAt(0),
+        '[data-countdown-h1]': h.charAt(1),
+        '[data-countdown-m0]': m.charAt(0),
+        '[data-countdown-m1]': m.charAt(1),
+        '[data-countdown-s0]': s.charAt(0),
+        '[data-countdown-s1]': s.charAt(1)
+      };
+
+      Object.keys(digits).forEach(function(selector) {
+        const element = container.querySelector(selector);
+        if (element) {
+          const val = digits[selector];
+          if (element.textContent !== val) {
+            element.textContent = val;
+            element.classList.add('flip');
+            setTimeout(function() {
+              element.classList.remove('flip');
+            }, 110);
+          }
+        }
+      });
+    }
+
+    setupTrackingLinks();
+    updateCountdown();
+
+    const intervalId = setInterval(updateCountdown, 1000);
+
+    if (typeof MutationObserver !== 'undefined') {
+      const observer = new MutationObserver(function() {
+        if (!document.body.contains(container)) {
+          clearInterval(intervalId);
+          observer.disconnect();
+        }
+      });
+
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+  })();
+<\/script>`;
+    }
+
+    function generateCodeClean(config) {
+      return `<style type="text/css">
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap');
+
+  .cdr-banner {
+    --digit-box-bg:   ${config.digitBgColor};
+    --digit-color:    ${config.digitTxtColor};
+    --label-color:    ${config.labelsColor};
+    --sep-color:      ${config.labelsColor};
+    
+    --digit-size:      clamp(12px, 3.3vw, 48px);
+    --label-size:      clamp(7px, 1vw, 14px);
+    --sep-size:        clamp(10px, 2.5vw, 36px);
+    --box-w:          clamp(14px, 3.7vw, 53px);
+    --box-h:          clamp(20px, 5.5vw, 80px);
+    --box-radius:      clamp(2px, 0.55vw, 8px);
+    --box-gap:        clamp(1px, 0.28vw, 4px);
+    --group-gap:      clamp(4px, 1.25vw, 18px);
+    --sep-margin-bottom: clamp(1px, 0.7vw, 10px);
+    --label-gap:      clamp(2px, 0.4vw, 6px);
+  }
+
+  @supports (width: 1cqw) {
+    .cdr-banner {
+      container-type: inline-size;
+      --digit-size:      clamp(12px, 3.3cqw, 48px);
+      --label-size:      clamp(7px, 1cqw, 14px);
+      --sep-size:        clamp(10px, 2.5cqw, 36px);
+      --box-w:          clamp(14px, 3.7cqw, 53px);
+      --box-h:          clamp(20px, 5.5cqw, 80px);
+      --box-radius:      clamp(2px, 0.55cqw, 8px);
+      --box-gap:        clamp(1px, 0.28cqw, 4px);
+      --group-gap:      clamp(4px, 1.25cqw, 18px);
+      --sep-margin-bottom: clamp(1px, 0.7cqw, 10px);
+      --label-gap:      clamp(2px, 0.4cqw, 6px);
+    }
+  }
+
+  .cdr-banner {
+    position:        relative;
+    width:           100%;
+    overflow:        hidden;
+    font-family:     'Inter', Arial, sans-serif;
+    display:         block;
+    line-height:     0;
+  }
+
+  .cdr-link {
+    cursor:          pointer;
+    transition:      opacity 0.3s ease;
+    display:         block;
+    width:           100%;
+    position:        relative;
+    text-decoration: none;
+    color:           inherit;
+  }
+
+  .cdr-link:hover {
+    opacity:         0.95;
+  }
+
+  .cdr-bg-img {
+    width:           100%;
+    height:          auto;
+    display:         block;
+  }
+
+  .cdr-timer {
+    position:        absolute;
+    top:             50%;
+    left:            50%;
+    transform:       translate(-50%, -50%);
+    display:         flex;
+    align-items:     center;
+    gap:             var(--group-gap);
+  }
+
+  .cdr-group {
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+    gap:             var(--label-gap);
+  }
+
+  .cdr-label {
+    font-size:       var(--label-size);
+    font-weight:     700;
+    color:           var(--label-color);
+    text-transform:  none;
+    letter-spacing:  0.02em;
+    white-space:     nowrap;
+    line-height:     1;
+  }
+
+  .cdr-digits {
+    display:         flex;
+    gap:             var(--box-gap);
+  }
+
+  .cdr-digit {
+    width:           var(--box-w);
+    height:          var(--box-h);
+    background:      var(--digit-box-bg);
+    border-radius:   var(--box-radius);
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    font-size:       var(--digit-size);
+    font-weight:     700;
+    color:           var(--digit-color);
+    font-variant-numeric: tabular-nums;
+    line-height:     1;
+    transition:      transform 0.1s ease;
+    box-shadow:      0 clamp(2px, 0.3vw, 4px) clamp(3px, 0.4vw, 6px) rgba(0, 0, 0, 0.2);
+  }
+
+  @supports (width: 1cqw) {
+    .cdr-digit {
+      box-shadow:    0 clamp(2px, 0.3cqw, 4px) clamp(3px, 0.4cqw, 6px) rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  .cdr-digit.flip {
+    transform: scale(0.88);
+  }
+
+  .cdr-sep {
+    font-size:       var(--sep-size);
+    font-weight:     700;
+    color:           var(--sep-color);
+    align-self:      flex-end;
+    margin-bottom:   var(--sep-margin-bottom);
+    line-height:     1;
+    opacity:         0.9;
+    animation:       cdrBlink 1s step-end infinite;
+  }
+
+  @keyframes cdrBlink {
+    0%, 100% { opacity: 0.9; }
+    50%       { opacity: 0.3; }
+  }
+
+  .cdr-expired {
+    position:        absolute;
+    top:             50%;
+    left:            50%;
+    transform:       translate(-50%, -50%);
+    font-size:       clamp(0.75rem, 2.5vw, 1.5rem);
+    font-weight:     700;
+    color:           #ffffff;
+    white-space:     nowrap;
+    text-shadow:     0 2px 8px rgba(0,0,0,0.5);
+  }
+
+  @supports (width: 1cqw) {
+    .cdr-expired {
+      font-size:       clamp(0.75rem, 2.5cqw, 1.5rem);
+    }
+  }
+</style>
+
+<!-- 
+  CONFIGURACIÓN SFCC EXPORTADA
+-->
+<div class="cdr-banner" 
+     data-countdown-end="${config.isoDate}" 
+     data-expired-message="${config.expiredMsg}">
+  
+  <a class="cdr-link" 
+     data-campaign="${config.campaign}" 
+     data-medium="${config.medium}" 
+     data-source="${config.source}" 
+     data-url="${config.linkUrl}">
+     
+    <img src="${config.bgImage}" class="cdr-bg-img" alt="Banner">
+    
+    <div class="cdr-timer">
+      <div class="cdr-group">
+        <span class="cdr-label">D&iacute;as</span>
+        <div class="cdr-digits">
+          <span class="cdr-digit cdr-d0">0</span>
+          <span class="cdr-digit cdr-d1">0</span>
+        </div>
+      </div>
+      <span class="cdr-sep">:</span>
+
+      <div class="cdr-group">
+        <span class="cdr-label">Horas</span>
+        <div class="cdr-digits">
+          <span class="cdr-digit cdr-h0">0</span>
+          <span class="cdr-digit cdr-h1">0</span>
+        </div>
+      </div>
+      <span class="cdr-sep">:</span>
+
+      <div class="cdr-group">
+        <span class="cdr-label">Minutos</span>
+        <div class="cdr-digits">
+          <span class="cdr-digit cdr-m0">0</span>
+          <span class="cdr-digit cdr-m1">0</span>
+        </div>
+      </div>
+      <span class="cdr-sep">:</span>
+
+      <div class="cdr-group">
+        <span class="cdr-label">Segundos</span>
+        <div class="cdr-digits">
+          <span class="cdr-digit cdr-s0">0</span>
+          <span class="cdr-digit cdr-s1">0</span>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var currentScript = document.currentScript || (function() {
+    var scripts = document.getElementsByTagName('script');
+    return scripts[scripts.length - 1];
+  })();
+  var container = currentScript.previousElementSibling;
+  if (!container || !container.classList.contains('cdr-banner')) {
+    container = currentScript.closest('.cdr-banner');
+  }
+  if (!container) { return; }
+
+  var targetStr = container.getAttribute('data-countdown-end');
+  var TARGET = targetStr ? new Date(targetStr).getTime() : new Date().getTime();
+  var EXPIRED_MSG = container.getAttribute('data-expired-message') || '¡Arrancó la Promoción!';
+
+  function setupTrackingLinks() {
+    var links = container.querySelectorAll('.cdr-link');
+
+    links.forEach(function(link) {
+      var baseUrl = link.getAttribute('data-url') || '/';
+      var campaign = link.getAttribute('data-campaign') || 'countdown';
+      var source = link.getAttribute('data-source') || 'banner';
+      var medium = link.getAttribute('data-medium') || 'web';
+
+      var separator = baseUrl.indexOf('?') !== -1 ? '&' : '?';
+      var utmParams = 'utm_source=' + encodeURIComponent(source) +
+                      '&utm_medium=' + encodeURIComponent(medium) +
+                      '&utm_campaign=' + encodeURIComponent(campaign) +
+                      '&utm_content=countdown-timer';
+      
+      link.href = baseUrl + separator + utmParams;
+
+      link.addEventListener('click', function() {
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'countdown_click', {
+            event_category: 'engagement',
+            event_label: campaign,
+            campaign_name: campaign,
+            source: source,
+            medium: medium
+          });
+        }
+
+        if (typeof ga !== 'undefined') {
+          ga('send', 'event', 'Countdown', 'Click', campaign);
+        }
+      });
+    });
+  }
+
+  function initCountdown() {
+    var elTimer = container.querySelector('.cdr-timer');
+    if (!elTimer) {
+      setTimeout(initCountdown, 100);
+      return;
+    }
+
+    var els = {
+      d0: container.querySelector('.cdr-d0'),
+      d1: container.querySelector('.cdr-d1'),
+      h0: container.querySelector('.cdr-h0'),
+      h1: container.querySelector('.cdr-h1'),
+      m0: container.querySelector('.cdr-m0'),
+      m1: container.querySelector('.cdr-m1'),
+      s0: container.querySelector('.cdr-s0'),
+      s1: container.querySelector('.cdr-s1')
+    };
+
+    function setDigits(el0, el1, value) {
+      var str = String(value);
+      if (str.length === 1) {
+        str = '0' + str;
+      }
+      if (el0) el0.textContent = str.charAt(0);
+      if (el1) el1.textContent = str.charAt(1);
+    }
+
+    function flip(el) {
+      if (!el) { return; }
+      el.classList.add('flip');
+      setTimeout(function () { el.classList.remove('flip'); }, 110);
+    }
+
+    var prevSec = -1;
+
+    function tick() {
+      var diff = TARGET - Date.now();
+
+      if (diff <= 0 || isNaN(diff)) {
+        elTimer.innerHTML = '';
+        var expDiv = document.createElement('div');
+        expDiv.className = 'cdr-expired';
+        expDiv.textContent = EXPIRED_MSG;
+        elTimer.appendChild(expDiv);
+        return;
+      }
+
+      var days  = Math.floor(diff / 86400000);
+      var hours = Math.floor((diff % 86400000) / 3600000);
+      var mins  = Math.floor((diff % 3600000)  / 60000);
+      var secs  = Math.floor((diff % 60000)    / 1000);
+
+      if (secs !== prevSec) {
+        flip(els.s0); flip(els.s1);
+        if (secs === 59) { flip(els.m0); flip(els.m1); }
+        if (secs === 59 && mins === 59) { flip(els.h0); flip(els.h1); }
+        if (secs === 59 && mins === 59 && hours === 23) { flip(els.d0); flip(els.d1); }
+        prevSec = secs;
+      }
+
+      setDigits(els.d0, els.d1, days);
+      setDigits(els.h0, els.h1, hours);
+      setDigits(els.m0, els.m1, mins);
+      setDigits(els.s0, els.s1, secs);
+    }
+
+    tick();
+    var intervalId = setInterval(tick, 1000);
+
+    if (typeof MutationObserver !== 'undefined') {
+      var observer = new MutationObserver(function () {
+        if (!document.body.contains(container)) {
+          clearInterval(intervalId);
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+  }
+
+  setupTrackingLinks();
+  initCountdown();
+}());
+<\/script>`;
+    }
+
+    // Default Configuration presets
+    const PRESETS = {
+      mundial: {
+        template: 'title',
+        titleText: '¡YA LLEGA EL MUNDIAL!',
+        endDate: '2026-06-11T17:30:00',
+        expiredMsg: '¡La promoción ha finalizado!',
+        bgImage: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png',
+        linkUrl: '/mundial',
+        campaign: 'mundial-2026-dexter',
+        source: 'banner-countdown',
+        medium: 'web',
+        digitBgColor: '#333333',
+        digitTxtColor: '#ffffff',
+        labelsColor: '#ffffff'
+      },
+      hotsale: {
+        template: 'title',
+        titleText: '🔥 ¡HOT SALE IMPERDIBLE! 🔥',
+        endDate: '2026-06-18T23:59:59',
+        expiredMsg: '¡Hot Sale ha terminado!',
+        bgImage: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png', // Fallback to mundial since it is original asset image
+        linkUrl: '/hot-sale',
+        campaign: 'hotsale-2026',
+        source: 'banner-countdown',
+        medium: 'web',
+        digitBgColor: '#ff5c00',
+        digitTxtColor: '#ffffff',
+        labelsColor: '#ffd700'
+      },
+      blackfriday: {
+        template: 'clean',
+        titleText: '',
+        endDate: '2026-11-27T00:00:00',
+        expiredMsg: '¡Ofertas finalizadas!',
+        bgImage: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png',
+        linkUrl: '/black-friday',
+        campaign: 'blackfriday-2026',
+        source: 'banner-countdown',
+        medium: 'web',
+        digitBgColor: '#111111',
+        digitTxtColor: '#f3f4f6',
+        labelsColor: '#9ca3af'
+      },
+      cyber: {
+        template: 'clean',
+        titleText: '',
+        endDate: '2026-11-02T23:59:00',
+        expiredMsg: '¡El tiempo se agotó!',
+        bgImage: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png',
+        linkUrl: '/cyber-monday',
+        campaign: 'cyber-monday-2026',
+        source: 'banner-countdown',
+        medium: 'web',
+        digitBgColor: '#00f0ff',
+        digitTxtColor: '#0d111a',
+        labelsColor: '#ff007f'
+      }
+    };
+
+    // Color Pickers logic
+    function updateColorText(picker, textId) {
+      document.getElementById(textId).value = picker.value.toUpperCase();
+      picker.parentElement.style.backgroundColor = picker.value;
+      triggerUpdate();
+    }
+
+    function updateColorPicker(textEl, pickerId) {
+      let val = textEl.value.trim();
+      if (!val.startsWith('#')) {
+        val = '#' + val;
+      }
+      if (/^#[0-9A-F]{6}$/i.test(val)) {
+        document.getElementById(pickerId).value = val;
+        document.getElementById(pickerId).parentElement.style.backgroundColor = val;
+        triggerUpdate();
+      }
+    }
+
+    // Image upload local
+    function handleLocalImage(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('bg-image-url').value = e.target.result;
+          triggerUpdate();
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // Set Default Target Date (2 days from now)
+    function setInitialDate() {
+      const now = new Date();
+      now.setDate(now.getDate() + 4);
+      // Format to yyyy-MM-ddThh:mm
+      const yyyy = now.getFullYear();
+      const MM = String(now.getMonth() + 1).padStart(2, '0');
+      const dd = String(now.getDate()).padStart(2, '0');
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      
+      document.getElementById('end-date').value = `${yyyy}-${MM}-${dd}T${hh}:${mm}`;
+    }
+
+    // Workspace device frame resizing
+    function setDeviceWidth(width, btn) {
+      const frameContainer = document.getElementById('device-frame');
+      frameContainer.style.width = width;
+
+      // Active state on buttons
+      document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Update resolution text
+      const wPx = width === '100%' ? frameContainer.offsetWidth : width;
+      document.getElementById('device-url-display').textContent = `sfcc-preview-sandbox.html (${wPx} x 250px)`;
+    }
+
+    // Preset loader
+    function loadPreset(presetName) {
+      const config = PRESETS[presetName];
+      if (!config) return;
+
+      // Set radios
+      if (config.template === 'title') {
+        document.getElementById('tmpl-title').checked = true;
+      } else {
+        document.getElementById('tmpl-clean').checked = true;
+      }
+
+      // Title Text
+      document.getElementById('title-text').value = config.titleText;
+      
+      // Date
+      document.getElementById('end-date').value = config.endDate.substring(0, 16);
+      
+      // Expired Msg
+      document.getElementById('expired-message').value = config.expiredMsg;
+      
+      // Images and Links
+      document.getElementById('bg-image-url').value = config.bgImage;
+      document.getElementById('link-url').value = config.linkUrl;
+      document.getElementById('utm-campaign').value = config.campaign;
+      document.getElementById('utm-source').value = config.source;
+      document.getElementById('utm-medium').value = config.medium;
+
+      // Colors
+      document.getElementById('color-digit-bg').value = config.digitBgColor;
+      document.getElementById('txt-digit-bg').value = config.digitBgColor.toUpperCase();
+      document.getElementById('digit-bg-preview').style.backgroundColor = config.digitBgColor;
+
+      document.getElementById('color-digit-txt').value = config.digitTxtColor;
+      document.getElementById('txt-digit-txt').value = config.digitTxtColor.toUpperCase();
+      document.getElementById('digit-color-preview').style.backgroundColor = config.digitTxtColor;
+
+      document.getElementById('color-labels').value = config.labelsColor;
+      document.getElementById('txt-labels').value = config.labelsColor.toUpperCase();
+      document.getElementById('labels-color-preview').style.backgroundColor = config.labelsColor;
+
+      // Toggle Title field visibility
+      toggleTitleField();
+
+      triggerUpdate();
+      showToast(`Preset "${presetName.toUpperCase()}" cargado`);
+    }
+
+    // Reset all form values to original state
+    function resetToOriginal() {
+      if (confirm('¿Estás seguro de que deseas restablecer todos los valores al estado original (Mundial Dexter)? Se borrarán los cambios guardados.')) {
+        try {
+          localStorage.removeItem('sfcc_countdown_config');
+        } catch(e) {}
+        loadPreset('mundial');
+        showToast('Valores restablecidos al estado original');
+      }
+    }
+
+    // Toggle title field visibility depending on radio
+    function toggleTitleField() {
+      const isTitleTmpl = document.getElementById('tmpl-title').checked;
+      const titleGroup = document.getElementById('title-text-group');
+      if (isTitleTmpl) {
+        titleGroup.style.display = 'block';
+      } else {
+        titleGroup.style.display = 'none';
+      }
+    }
+
+    // Generate output HTML
+    function getConfiguration() {
+      const isTitleTmpl = document.getElementById('tmpl-title').checked;
+      const dateVal = document.getElementById('end-date').value;
+      
+      // Convert local date input to UTC ISO String
+      let isoDate = '2026-06-11T17:30:00Z';
+      let endDateStr = '2026-06-11 17:30:00';
+      if (dateVal) {
+        const localDate = new Date(dateVal);
+        isoDate = localDate.toISOString();
+        // Friendly formatted date for comments
+        endDateStr = localDate.toISOString().replace('T', ' ').substring(0, 19);
+      }
+
+      return {
+        template: isTitleTmpl ? 'title' : 'clean',
+        isoDate: isoDate,
+        endDateStr: endDateStr,
+        expiredMsg: document.getElementById('expired-message').value,
+        titleText: document.getElementById('title-text').value,
+        bgImage: document.getElementById('bg-image-url').value,
+        linkUrl: document.getElementById('link-url').value,
+        campaign: document.getElementById('utm-campaign').value,
+        source: document.getElementById('utm-source').value,
+        medium: document.getElementById('utm-medium').value,
+        digitBgColor: document.getElementById('txt-digit-bg').value,
+        digitTxtColor: document.getElementById('txt-digit-txt').value,
+        labelsColor: document.getElementById('txt-labels').value
+      };
+    }
+
+    // Highlighting HTML markup helper
+    function highlightHTML(code) {
+      // Escape HTML first
+      let html = code
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+      // Regex that matches comments, tags (and their inner contents), strings, or numbers
+      const regex = /(&lt;!--[\s\S]*?--&gt;)|(&lt;\/?[a-zA-Z0-9:-]+(?:\s+[a-zA-Z0-9_-]+(?:\s*=\s*(?:"[^"]*"|'[^']*'))?)*\s*\/?&gt;)|("[^"]*"|'[^']*')|(\b\d+\b)/g;
+
+      return html.replace(regex, (match, comment, tag, string, number) => {
+        if (comment) {
+          return `<span class="token-comment">${comment}</span>`;
+        }
+        if (tag) {
+          // Parse tag elements safely: tagMatch matches: open bracket + tag name + attributes + close bracket
+          const tagMatch = tag.match(/^(&lt;\/?)([a-zA-Z0-9:-]+)([\s\S]*?)(\/?&gt;)$/);
+          if (tagMatch) {
+            const [_, openBracket, tagName, attrs, closeBracket] = tagMatch;
+            
+            // Highlight attributes inside the raw attributes string (no spans present yet!)
+            const highlightedAttrs = attrs.replace(/(\s+)([a-zA-Z0-9_-]+)(\s*=\s*)("[^"]*"|'[^']*')/g, 
+              '$1<span class="token-attr-name">$2</span>$3<span class="token-string">$4</span>'
+            );
+            
+            return `<span class="token-tag">${openBracket}${tagName}</span>${highlightedAttrs}<span class="token-tag">${closeBracket}</span>`;
+          }
+          return tag;
+        }
+        if (string) {
+          return `<span class="token-string">${string}</span>`;
+        }
+        if (number) {
+          return `<span class="token-number">${number}</span>`;
+        }
+        return match;
+      });
+    }
+
+    // Main Update Function
+    function triggerUpdate() {
+      const config = getConfiguration();
+      let code = '';
+      if (config.template === 'title') {
+        code = generateCodeWithTitle(config);
+      } else {
+        code = generateCodeClean(config);
+      }
+
+      // Set Textarea value
+      document.getElementById('output-code').value = code;
+
+      // Update highlighter overlay
+      document.getElementById('code-overlay').innerHTML = highlightHTML(code);
+
+      // Write into Preview iframe
+      const iframe = document.getElementById('preview-frame');
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      doc.open();
+      
+      // Build a wrapper document inside iframe to center the banner perfectly
+      const iframeHTML = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .preview-wrapper {
+      width: 100%;
+      max-width: 1440px;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-wrapper">
+    ${code}
+  </div>
+</body>
+</html>`;
+      
+      doc.write(iframeHTML);
+      doc.close();
+
+      // Save to localStorage
+      saveState(config);
+    }
+
+    // Toast utility
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
+
+    // Copy to Clipboard with satisfying micro-animation feedback
+    function copyCode() {
+      const btn = document.getElementById('copy-btn');
+      const text = document.getElementById('output-code').value;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalHTML = btn.innerHTML;
+        const originalBg = btn.style.background;
+        
+        // Success animation state
+        btn.innerHTML = `
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+          </svg>
+          ¡Copiado!
+        `;
+        btn.style.background = '#10b981'; // vibrant green success color
+        btn.style.borderColor = '#10b981';
+        btn.style.color = '#ffffff';
+        
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          btn.style.background = originalBg;
+          btn.style.borderColor = '';
+          btn.style.color = '';
+        }, 1800);
+
+        showToast('¡Código copiado al portapapeles!');
+      }).catch(err => {
+        console.error('Error al copiar:', err);
+        showToast('Error al copiar el código.');
+      });
+    }
+
+    // Download code as HTML file
+    function downloadCode() {
+      const text = document.getElementById('output-code').value;
+      const blob = new Blob([text], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sfcc-countdown-asset.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Archivo descargado con éxito');
+    }
+
+    // LocalStorage State management
+    function saveState(config) {
+      try {
+        localStorage.setItem('sfcc_countdown_config', JSON.stringify(config));
+      } catch(e) {}
+    }
+
+    function loadSavedState() {
+      try {
+        const saved = localStorage.getItem('sfcc_countdown_config');
+        if (saved) {
+          const config = JSON.parse(saved);
+          
+          if (config.template === 'title') {
+            document.getElementById('tmpl-title').checked = true;
+          } else {
+            document.getElementById('tmpl-clean').checked = true;
+          }
+          
+          document.getElementById('title-text').value = config.titleText || '';
+          document.getElementById('end-date').value = (config.isoDate || '').substring(0, 16);
+          document.getElementById('expired-message').value = config.expiredMsg || '';
+          document.getElementById('bg-image-url').value = config.bgImage || '';
+          document.getElementById('link-url').value = config.linkUrl || '';
+          document.getElementById('utm-campaign').value = config.campaign || '';
+          document.getElementById('utm-source').value = config.source || '';
+          document.getElementById('utm-medium').value = config.medium || '';
+          
+          document.getElementById('txt-digit-bg').value = config.digitBgColor || '#333333';
+          document.getElementById('color-digit-bg').value = config.digitBgColor || '#333333';
+          document.getElementById('digit-bg-preview').style.backgroundColor = config.digitBgColor || '#333333';
+          
+          document.getElementById('txt-digit-txt').value = config.digitTxtColor || '#ffffff';
+          document.getElementById('color-digit-txt').value = config.digitTxtColor || '#ffffff';
+          document.getElementById('digit-color-preview').style.backgroundColor = config.digitTxtColor || '#ffffff';
+          
+          document.getElementById('txt-labels').value = config.labelsColor || '#ffffff';
+          document.getElementById('color-labels').value = config.labelsColor || '#ffffff';
+          document.getElementById('labels-color-preview').style.backgroundColor = config.labelsColor || '#ffffff';
+          
+          toggleTitleField();
+          triggerUpdate();
+          return true;
+        }
+      } catch (e) {}
+      return false;
+    }
+
+    // Toggle collapsible card visibility
+    function toggleCard(header) {
+      const card = header.closest('.collapsible-card');
+      if (card) {
+        card.classList.toggle('collapsed');
+      }
+    }
+
+    // DOM Setup and listeners
+    window.addEventListener('DOMContentLoaded', () => {
+      setInitialDate();
+      
+      // Attach listeners to input changes
+      const inputs = [
+        'title-text', 'end-date', 'expired-message', 'bg-image-url', 
+        'link-url', 'utm-campaign', 'utm-source', 'utm-medium'
+      ];
+      inputs.forEach(id => {
+        document.getElementById(id).addEventListener('input', triggerUpdate);
+      });
+
+      // Template switches
+      document.getElementById('tmpl-title').addEventListener('change', () => {
+        toggleTitleField();
+        triggerUpdate();
+      });
+      document.getElementById('tmpl-clean').addEventListener('change', () => {
+        toggleTitleField();
+        triggerUpdate();
+      });
+
+      // Synchronize text overlay scrolling with textarea scrolling
+      const textarea = document.getElementById('output-code');
+      const overlay = document.getElementById('code-overlay');
+      textarea.addEventListener('scroll', () => {
+        overlay.scrollTop = textarea.scrollTop;
+        overlay.scrollLeft = textarea.scrollLeft;
+      });
+
+      // Attempt to load saved state, otherwise load default 'mundial'
+      const loaded = loadSavedState();
+      if (!loaded) {
+        loadPreset('mundial');
+      } else {
+        triggerUpdate();
+      }
+    });
+  </script>
+</body>
+</html>

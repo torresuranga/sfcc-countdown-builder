@@ -1,0 +1,138 @@
+{
+    "id": "countdown_timer",
+    "type": "component",
+    "name": "Countdown Timer",
+    "description": "Contador regresivo para descuentos y promociones especiales (Mundial 2026)",
+    "group": "Commerce",
+    "thumbnail": "",
+    "region_definitions": [],
+    "attribute_definition_groups": [
+        {
+            "id": "content",
+            "name": "Contenido",
+            "description": "Textos, fecha y enlaces del contador",
+            "attribute_definitions": [
+                {
+                    "id": "heading",
+                    "name": "Título",
+                    "description": "Texto principal (se muestra si no se usa imagen de fondo)",
+                    "type": "string",
+                    "default": "¡DESCUENTO ESPECIAL!"
+                },
+                {
+                    "id": "subheading",
+                    "name": "Subtítulo",
+                    "description": "Texto secundario (se muestra si no se usa imagen de fondo)",
+                    "type": "string",
+                    "default": "Tiempo restante para aprovechar:"
+                },
+                {
+                    "id": "backgroundImage",
+                    "name": "Imagen de fondo (Banner)",
+                    "description": "Imagen de fondo del contador (ej. Banner del Mundial)",
+                    "type": "file",
+                    "required": false
+                },
+                {
+                    "id": "targetUrl",
+                    "name": "URL de destino",
+                    "description": "URL de la página de destino al hacer clic (ej. /mundial)",
+                    "type": "string",
+                    "required": false
+                },
+                {
+                    "id": "campaign",
+                    "name": "Campaña (utm_campaign)",
+                    "description": "Nombre de la campaña para tracking",
+                    "type": "string",
+                    "default": "mundial-2026-dexter"
+                },
+                {
+                    "id": "source",
+                    "name": "Origen (utm_source)",
+                    "description": "Origen del tráfico para tracking",
+                    "type": "string",
+                    "default": "banner-countdown"
+                },
+                {
+                    "id": "medium",
+                    "name": "Medio (utm_medium)",
+                    "description": "Medio del tráfico para tracking",
+                    "type": "string",
+                    "default": "web"
+                },
+                {
+                    "id": "expiredMessage",
+                    "name": "Mensaje al expirar",
+                    "description": "Texto que se muestra cuando el contador llega a cero",
+                    "type": "string",
+                    "default": "¡Arrancó el Mundial!"
+                },
+                {
+                    "id": "countdownDate",
+                    "name": "Fecha y hora de fin",
+                    "description": "Fecha objetivo en formato ISO 8601 (Ej: 2026-06-11T19:00:00Z)",
+                    "type": "string",
+                    "default": "2026-06-11T19:00:00Z",
+                    "required": true
+                }
+            ]
+        },
+        {
+            "id": "design",
+            "name": "Diseño",
+            "description": "Personalización visual del componente",
+            "attribute_definitions": [
+                {
+                    "id": "colorStart",
+                    "name": "Color degradado inicio",
+                    "description": "Color inicial del fondo si no hay imagen (hex)",
+                    "type": "string",
+                    "default": "#667eea"
+                },
+                {
+                    "id": "colorEnd",
+                    "name": "Color degradado fin",
+                    "description": "Color final del fondo si no hay imagen (hex)",
+                    "type": "string",
+                    "default": "#764ba2"
+                },
+                {
+                    "id": "borderRadius",
+                    "name": "Radio de bordes (px)",
+                    "description": "Curvatura de las esquinas del contenedor",
+                    "type": "string",
+                    "default": "10"
+                },
+                {
+                    "id": "digitBoxBg",
+                    "name": "Color fondo de dígitos",
+                    "description": "Color de fondo para las cajitas de los números (hex/rgba)",
+                    "type": "string",
+                    "default": "#333333"
+                },
+                {
+                    "id": "digitColor",
+                    "name": "Color texto de dígitos",
+                    "description": "Color de la fuente de los números (hex)",
+                    "type": "string",
+                    "default": "#ffffff"
+                },
+                {
+                    "id": "labelColor",
+                    "name": "Color de etiquetas",
+                    "description": "Color de los textos 'Días', 'Horas', etc. (hex)",
+                    "type": "string",
+                    "default": "#ffffff"
+                },
+                {
+                    "id": "sepColor",
+                    "name": "Color de separadores",
+                    "description": "Color de los dos puntos ':' (hex)",
+                    "type": "string",
+                    "default": "#ffffff"
+                }
+            ]
+        }
+    ]
+}

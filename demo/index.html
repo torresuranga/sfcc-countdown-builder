@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo – Contador Vestite de Pasión (Mundial 2026)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 20px;
+      font-family: 'Inter', sans-serif;
+    }
+    .demo-label {
+      color: rgba(255,255,255,0.4);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <span class="demo-label">⚡ Demo – SFCC Content Asset Preview (Mundial 2026)</span>
+
+  <!-- Contenedor del contador - sigue exactamente el patrón de Dexter Hot Sale -->
+  <div class="countdown-container" data-countdown-end="2026-06-11T17:30:00Z">
+    <a class="countdown-link" data-campaign="mundial-2026-dexter" data-medium="web" data-source="banner-countdown" data-url="/mundial" style="text-decoration: none; color: inherit; display: block; width: 100%; height: 100%;">
+      <div class="countdown-timer-wrapper">
+        <h2 class="countdown-title">¡SE VIENE EL MUNDIAL!</h2>
+        <div class="timer-digits-row">
+          <div class="time-group">
+            <span class="time-label">D&iacute;as</span>
+            <div class="time-digits">
+              <span class="time-digit" data-countdown-d0>0</span>
+              <span class="time-digit" data-countdown-d1>0</span>
+            </div>
+          </div>
+          <span class="time-sep">:</span>
+
+          <div class="time-group">
+            <span class="time-label">Horas</span>
+            <div class="time-digits">
+              <span class="time-digit" data-countdown-h0>0</span>
+              <span class="time-digit" data-countdown-h1>0</span>
+            </div>
+          </div>
+          <span class="time-sep">:</span>
+
+          <div class="time-group">
+            <span class="time-label">Minutos</span>
+            <div class="time-digits">
+              <span class="time-digit" data-countdown-m0>0</span>
+              <span class="time-digit" data-countdown-m1>0</span>
+            </div>
+          </div>
+          <span class="time-sep">:</span>
+
+          <div class="time-group">
+            <span class="time-label">Segundos</span>
+            <div class="time-digits">
+              <span class="time-digit" data-countdown-s0>0</span>
+              <span class="time-digit" data-countdown-s1>0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <style type="text/css">
+    .countdown-container {
+      --digit-box-bg: #333333;
+      --digit-color: #ffffff;
+      --label-color: #ffffff;
+      --sep-color: #ffffff;
+      --digit-size: 48px;
+      --label-size: 14px;
+      --sep-size: 36px;
+      --box-w: 53px;
+      --box-h: 80px;
+      --box-radius: 8px;
+      --box-gap: 4px;
+      --group-gap: 18px;
+      
+      position: relative;
+      width: 100%;
+      max-width: 1440px;
+      height: 250px;
+      background-image: url('https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow: hidden;
+      box-sizing: border-box;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+
+    .countdown-timer-wrapper {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(8px, 1.5vw, 16px);
+    }
+
+    .countdown-title {
+      font-size: clamp(14px, 2.2vw, 24px);
+      font-weight: 700;
+      color: var(--label-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 0;
+      line-height: 1.2;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      white-space: nowrap;
+    }
+
+    .timer-digits-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: var(--group-gap);
+    }
+
+    .time-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .time-label {
+      font-size: var(--label-size);
+      font-weight: 700;
+      color: var(--label-color);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .time-digits {
+      display: flex;
+      gap: var(--box-gap);
+    }
+
+    .time-digit {
+      width: var(--box-w);
+      height: var(--box-h);
+      background: var(--digit-box-bg);
+      border-radius: var(--box-radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--digit-size);
+      font-weight: 700;
+      color: var(--digit-color);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      transition: transform 0.1s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .time-digit.flip {
+      transform: scale(0.88);
+    }
+
+    .time-sep {
+      font-size: var(--sep-size);
+      font-weight: 700;
+      color: var(--sep-color);
+      align-self: flex-end;
+      margin-bottom: 12px;
+      line-height: 1;
+      opacity: 0.9;
+      animation: timeBlink 1s step-end infinite;
+    }
+
+    @keyframes timeBlink {
+      0%, 100% { opacity: 0.9; }
+      50%       { opacity: 0.3; }
+    }
+
+    /* Responsive styling */
+    @media (max-width: 768px) {
+      .countdown-container {
+        height: 200px;
+        --digit-size: 38px;
+        --label-size: 12px;
+        --sep-size: 28px;
+        --box-w: 45px;
+        --box-h: 68px;
+        --box-radius: 6px;
+        --box-gap: 3px;
+        --group-gap: 12px;
+      }
+      .time-sep {
+        margin-bottom: 10px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .countdown-container {
+        height: 160px;
+        --digit-size: 30px;
+        --label-size: 10px;
+        --sep-size: 22px;
+        --box-w: 36px;
+        --box-h: 54px;
+        --box-radius: 5px;
+        --box-gap: 3px;
+        --group-gap: 8px;
+      }
+      .time-sep {
+        margin-bottom: 8px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .countdown-container {
+        height: 140px;
+        --digit-size: 24px;
+        --label-size: 9px;
+        --sep-size: 18px;
+        --box-w: 30px;
+        --box-h: 45px;
+        --box-radius: 4px;
+        --box-gap: 2px;
+        --group-gap: 6px;
+      }
+      .time-sep {
+        margin-bottom: 6px;
+      }
+    }
+
+    .countdown-expired {
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      margin: 0;
+    }
+  </style>
+
+  <script>
+    (function() {
+      'use strict';
+
+      // Localizamos el contenedor de forma relativa
+      const container = document.currentScript.previousElementSibling.previousElementSibling;
+      if (!container || !container.matches('.countdown-container')) return;
+
+      const countdownDate = new Date(container.getAttribute('data-countdown-end')).getTime();
+
+      function setupTrackingLinks() {
+        const links = container.querySelectorAll('.countdown-link');
+
+        links.forEach(function(link) {
+          const baseUrl = link.getAttribute('data-url') || '/';
+          const campaign = link.getAttribute('data-campaign') || 'mundial-2026';
+          const source = link.getAttribute('data-source') || 'banner-countdown';
+          const medium = link.getAttribute('data-medium') || 'web';
+
+          const params = new URLSearchParams({
+            utm_source: source,
+            utm_medium: medium,
+            utm_campaign: campaign,
+            utm_content: 'countdown-timer'
+          });
+
+          link.href = baseUrl + '?' + params.toString();
+
+          link.addEventListener('click', function() {
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'countdown_click', {
+                event_category: 'engagement',
+                event_label: campaign,
+                campaign_name: campaign,
+                source: source,
+                medium: medium
+              });
+            }
+
+            if (typeof ga !== 'undefined') {
+              ga('send', 'event', 'Countdown', 'Click', campaign);
+            }
+          });
+        });
+      }
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = countdownDate - now;
+
+        if (distance < 0) {
+          const timerWrapper = container.querySelector('.countdown-timer-wrapper');
+          if (timerWrapper) {
+            timerWrapper.innerHTML = '';
+            const message = document.createElement('p');
+            message.className = 'countdown-expired';
+            message.textContent = '¡La promoción ha finalizado!';
+            timerWrapper.appendChild(message);
+          }
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        const d = String(days).padStart(2, '0');
+        const h = String(hours).padStart(2, '0');
+        const m = String(minutes).padStart(2, '0');
+        const s = String(seconds).padStart(2, '0');
+
+        const digits = {
+          '[data-countdown-d0]': d.charAt(0),
+          '[data-countdown-d1]': d.charAt(1),
+          '[data-countdown-h0]': h.charAt(0),
+          '[data-countdown-h1]': h.charAt(1),
+          '[data-countdown-m0]': m.charAt(0),
+          '[data-countdown-m1]': m.charAt(1),
+          '[data-countdown-s0]': s.charAt(0),
+          '[data-countdown-s1]': s.charAt(1)
+        };
+
+        Object.keys(digits).forEach(function(selector) {
+          const element = container.querySelector(selector);
+          if (element) {
+            const val = digits[selector];
+            if (element.textContent !== val) {
+              element.textContent = val;
+              element.classList.add('flip');
+              setTimeout(function() {
+                element.classList.remove('flip');
+              }, 110);
+            }
+          }
+        });
+      }
+
+      setupTrackingLinks();
+      updateCountdown();
+
+      const intervalId = setInterval(updateCountdown, 1000);
+
+      if (typeof MutationObserver !== 'undefined') {
+        const observer = new MutationObserver(function() {
+          if (!document.body.contains(container)) {
+            clearInterval(intervalId);
+            observer.disconnect();
+          }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+      }
+    })();
+  </script>
+</body>
+</html>
