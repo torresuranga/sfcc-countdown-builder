@@ -42,10 +42,9 @@
               <span class="time-digit" data-countdown-d1>0</span>
             </div>
           </div>
-          <span class="time-sep">:</span>
 
           <div class="time-group">
-            <span class="time-label">Horas</span>
+            <span class="time-label">Hs</span>
             <div class="time-digits">
               <span class="time-digit" data-countdown-h0>0</span>
               <span class="time-digit" data-countdown-h1>0</span>
@@ -54,7 +53,7 @@
           <span class="time-sep">:</span>
 
           <div class="time-group">
-            <span class="time-label">Minutos</span>
+            <span class="time-label">Min</span>
             <div class="time-digits">
               <span class="time-digit" data-countdown-m0>0</span>
               <span class="time-digit" data-countdown-m1>0</span>
@@ -63,7 +62,7 @@
           <span class="time-sep">:</span>
 
           <div class="time-group">
-            <span class="time-label">Segundos</span>
+            <span class="time-label">Seg</span>
             <div class="time-digits">
               <span class="time-digit" data-countdown-s0>0</span>
               <span class="time-digit" data-countdown-s1>0</span>
@@ -92,7 +91,8 @@
       position: relative;
       width: 100%;
       max-width: 1440px;
-      height: 250px;
+      aspect-ratio: 1440 / 250;
+      height: auto;
       background-image: url('https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png');
       background-size: cover;
       background-position: center;
@@ -179,10 +179,15 @@
       font-weight: 700;
       color: var(--sep-color);
       align-self: flex-end;
-      margin-bottom: 12px;
+      margin-bottom: calc((var(--box-h) - var(--sep-size)) / 2);
       line-height: 1;
       opacity: 0.9;
       animation: timeBlink 1s step-end infinite;
+      width: 0;
+      display: inline-flex;
+      justify-content: center;
+      margin-left: calc(-1 * var(--group-gap) / 2);
+      margin-right: calc(-1 * var(--group-gap) / 2);
     }
 
     @keyframes timeBlink {
@@ -193,52 +198,62 @@
     /* Responsive styling */
     @media (max-width: 768px) {
       .countdown-container {
-        height: 200px;
-        --digit-size: 38px;
-        --label-size: 12px;
-        --sep-size: 28px;
-        --box-w: 45px;
-        --box-h: 68px;
+        --digit-size: 32px;
+        --label-size: 10px;
+        --sep-size: 24px;
+        --box-w: 36px;
+        --box-h: 56px;
         --box-radius: 6px;
         --box-gap: 3px;
         --group-gap: 12px;
       }
-      .time-sep {
-        margin-bottom: 10px;
+      .countdown-title {
+        font-size: clamp(12px, 2vw, 18px);
+      }
+      .countdown-timer-wrapper {
+        gap: 6px;
       }
     }
 
     @media (max-width: 480px) {
       .countdown-container {
-        height: 160px;
-        --digit-size: 30px;
-        --label-size: 10px;
-        --sep-size: 22px;
-        --box-w: 36px;
-        --box-h: 54px;
-        --box-radius: 5px;
-        --box-gap: 3px;
+        aspect-ratio: 5 / 1;
+        background-image: url('https://image.grupodabra.com/lib/fe37157175640478731176/m/1/d720e4d6-19cd-4dbd-949f-b2bc82829f94.png');
+        --digit-size: 18px;
+        --label-size: 8px;
+        --sep-size: 14px;
+        --box-w: 22px;
+        --box-h: 32px;
+        --box-radius: 4px;
+        --box-gap: 2px;
         --group-gap: 8px;
       }
-      .time-sep {
-        margin-bottom: 8px;
+      .countdown-title {
+        font-size: 11px;
+        letter-spacing: 1px;
+      }
+      .countdown-timer-wrapper {
+        gap: 4px;
       }
     }
 
     @media (max-width: 360px) {
       .countdown-container {
-        height: 140px;
-        --digit-size: 24px;
-        --label-size: 9px;
-        --sep-size: 18px;
-        --box-w: 30px;
-        --box-h: 45px;
-        --box-radius: 4px;
-        --box-gap: 2px;
+        --digit-size: 15px;
+        --label-size: 7px;
+        --sep-size: 11px;
+        --box-w: 18px;
+        --box-h: 26px;
+        --box-radius: 3px;
+        --box-gap: 1.5px;
         --group-gap: 6px;
       }
-      .time-sep {
-        margin-bottom: 6px;
+      .countdown-title {
+        font-size: 9px;
+        letter-spacing: 0.5px;
+      }
+      .countdown-timer-wrapper {
+        gap: 3px;
       }
     }
 

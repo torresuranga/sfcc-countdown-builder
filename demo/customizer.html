@@ -1063,185 +1063,12 @@
       font-size: 0.8rem;
     }
 
-    /* Security Protection Overlay */
-    .security-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(4, 6, 10, 0.88);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      z-index: 9999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 1;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
-    }
 
-    .security-overlay.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .security-card {
-      background: rgba(17, 24, 39, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 40px;
-      width: 90%;
-      max-width: 420px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-      text-align: center;
-      position: relative;
-      transform: translateY(0);
-      transition: transform 0.3s ease;
-    }
-
-    .security-card.shake {
-      animation: shake 0.4s ease-in-out;
-    }
-
-    @keyframes shake {
-      0%, 100% { transform: translateX(0); }
-      20%, 60% { transform: translateX(-8px); }
-      40%, 80% { transform: translateX(8px); }
-    }
-
-    .security-icon {
-      width: 56px;
-      height: 56px;
-      background: rgba(99, 102, 241, 0.15);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: #a5b4fc;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 24px auto;
-      box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
-    }
-
-    .security-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      background: linear-gradient(to right, #fff, #a5b4fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .security-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.5;
-      margin-bottom: 28px;
-    }
-
-    .security-input-wrapper {
-      position: relative;
-      margin-bottom: 20px;
-    }
-
-    .security-input {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 12px 42px 12px 16px;
-      color: var(--text-main);
-      font-size: 1.1rem;
-      outline: none;
-      text-align: center;
-      letter-spacing: 0.15em;
-      transition: all 0.2s ease;
-      font-family: inherit;
-    }
-
-    .security-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .security-toggle-btn {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: transparent;
-      border: 0;
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px;
-    }
-
-    .security-toggle-btn:hover {
-      color: var(--text-main);
-    }
-
-    .security-btn {
-      width: 100%;
-      background: var(--accent-gradient);
-      color: #fff;
-      border: 0;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-      transition: all 0.2s ease;
-      font-family: inherit;
-    }
-
-    .security-btn:hover {
-      opacity: 0.95;
-      transform: translateY(-1px);
-    }
-
-    .security-error {
-      color: #ef4444;
-      font-size: 0.82rem;
-      margin-top: 12px;
-      display: none;
-      font-weight: 500;
-    }
   </style>
 </head>
 <body>
 
-  <!-- Security Access Lock Overlay -->
-  <div id="security-overlay" class="security-overlay">
-    <div id="security-card" class="security-card">
-      <div class="security-icon">
-        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-        </svg>
-      </div>
-      <h2 class="security-title">Acceso Restringido</h2>
-      <p class="security-desc">Introduce la clave de acceso de seguridad para ingresar al constructor de cuenta regresiva.</p>
-      
-      <div class="security-input-wrapper">
-        <input type="password" id="security-passcode" class="security-input" placeholder="••••••••" onkeydown="if(event.key === 'Enter') submitPasscode()">
-        <button type="button" id="security-toggle-btn" class="security-toggle-btn" onclick="togglePasswordVisibility()">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-          </svg>
-        </button>
-      </div>
-      
-      <button type="button" class="security-btn" onclick="submitPasscode()">Ingresar</button>
-      <div id="security-error" class="security-error">Código incorrecto. Intenta de nuevo.</div>
-    </div>
-  </div>
+
 
   <!-- Toast Notification -->
   <div id="toast" class="toast">
@@ -1434,6 +1261,21 @@
             </div>
 
             <div class="form-group">
+              <label for="bg-image-url-mobile">URL de Imagen de Fondo (Mobile)</label>
+              <input type="text" id="bg-image-url-mobile" value="">
+              <div class="file-input-wrapper">
+                <span class="file-label-btn">
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                  </svg>
+                  Cargar imagen local (Mobile) para previsualizar
+                </span>
+                <input type="file" id="local-image-mobile" accept="image/*" onchange="handleLocalImageMobile(this)">
+              </div>
+              <p class="help-text">Opcional. Imagen optimizada para pantallas verticales (Max 768px de ancho).</p>
+            </div>
+
+            <div class="form-group">
               <label for="link-url">URL Destino (Link)</label>
               <input type="text" id="link-url" value="/mundial" placeholder="Ej. /hotsale o https://www.dexter.com.ar/...">
             </div>
@@ -1587,12 +1429,6 @@
   </div>
 
   <script>
-    // ==========================================
-    // CONFIGURACIÓN DE SEGURIDAD (GitHub Pages)
-    // ==========================================
-    // Cambia este código de acceso por el que desees utilizar
-    const ACCESS_CODE = 'Solu2026';
-
     // Inicializar Tema Claro/Oscuro inmediatamente para evitar parpadeos
     (function() {
       const savedTheme = localStorage.getItem('sfcc_countdown_theme');
@@ -1604,71 +1440,6 @@
     function toggleTheme() {
       const isLight = document.body.classList.toggle('light-theme');
       localStorage.setItem('sfcc_countdown_theme', isLight ? 'light' : 'dark');
-    }
-
-    function checkSecurityAccess() {
-      if (sessionStorage.getItem('countdown_customizer_authorized') === 'true') {
-        const overlay = document.getElementById('security-overlay');
-        if (overlay) {
-          overlay.classList.add('hidden');
-        }
-        return;
-      }
-      // Focus on password input once loading completes
-      setTimeout(() => {
-        const input = document.getElementById('security-passcode');
-        if (input) input.focus();
-      }, 200);
-    }
-
-    function submitPasscode() {
-      const input = document.getElementById('security-passcode');
-      const errorMsg = document.getElementById('security-error');
-      const card = document.getElementById('security-card');
-      const value = input.value.trim();
-
-      if (value === ACCESS_CODE) {
-        sessionStorage.setItem('countdown_customizer_authorized', 'true');
-        const overlay = document.getElementById('security-overlay');
-        if (overlay) {
-          overlay.classList.add('hidden');
-        }
-        if (errorMsg) errorMsg.style.display = 'none';
-      } else {
-        // Show error and shake card
-        if (errorMsg) errorMsg.style.display = 'block';
-        if (card) {
-          card.classList.add('shake');
-          setTimeout(() => {
-            card.classList.remove('shake');
-          }, 400);
-        }
-        input.value = '';
-        input.focus();
-      }
-    }
-
-    function togglePasswordVisibility() {
-      const input = document.getElementById('security-passcode');
-      const btn = document.getElementById('security-toggle-btn');
-      if (input && btn) {
-        if (input.type === 'password') {
-          input.type = 'text';
-          btn.innerHTML = `
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path>
-            </svg>
-          `;
-        } else {
-          input.type = 'password';
-          btn.innerHTML = `
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-            </svg>
-          `;
-        }
-      }
     }
 
     // Templates as JS Functions
@@ -1686,7 +1457,10 @@ Countdown ends: ${config.endDateStr} Z
      data-url="${config.linkUrl}" 
      style="text-decoration: none; color: inherit; display: block; width: 100%; height: 100%;">
     
-    <img src="${config.bgImage}" class="countdown-bg-img" alt="Banner del Contador">
+    <picture>
+      ${config.bgImageMobile ? `<source media="(max-width: 480px)" srcset="${config.bgImageMobile}">` : ''}
+      <img src="${config.bgImage}" class="countdown-bg-img" alt="Banner del Contador">
+    </picture>
     
     <div class="countdown-timer-wrapper">
       <h2 class="countdown-title">${config.titleText}</h2>
@@ -1698,10 +1472,9 @@ Countdown ends: ${config.endDateStr} Z
             <span class="time-digit" data-countdown-d1>0</span>
           </div>
         </div>
-        <span class="time-sep">:</span>
 
         <div class="time-group">
-          <span class="time-label">Horas</span>
+          <span class="time-label">Hs</span>
           <div class="time-digits">
             <span class="time-digit" data-countdown-h0>0</span>
             <span class="time-digit" data-countdown-h1>0</span>
@@ -1710,7 +1483,7 @@ Countdown ends: ${config.endDateStr} Z
         <span class="time-sep">:</span>
 
         <div class="time-group">
-          <span class="time-label">Minutos</span>
+          <span class="time-label">Min</span>
           <div class="time-digits">
             <span class="time-digit" data-countdown-m0>0</span>
             <span class="time-digit" data-countdown-m1>0</span>
@@ -1719,7 +1492,7 @@ Countdown ends: ${config.endDateStr} Z
         <span class="time-sep">:</span>
 
         <div class="time-group">
-          <span class="time-label">Segundos</span>
+          <span class="time-label">Seg</span>
           <div class="time-digits">
             <span class="time-digit" data-countdown-s0>0</span>
             <span class="time-digit" data-countdown-s1>0</span>
@@ -1744,7 +1517,7 @@ Countdown ends: ${config.endDateStr} Z
     --sep-size:        clamp(10px, 2.5vw, 36px);
     --box-w:          clamp(14px, 3.7vw, 53px);
     --box-h:          clamp(20px, 5.5vw, 80px);
-    --box-radius:      clamp(2px, 0.55vw, 8px);
+    --box-radius:      clamp(4px, 0.55vw, 8px);
     --box-gap:        clamp(1px, 0.28vw, 4px);
     --group-gap:      clamp(4px, 1.25vw, 18px);
     --sep-margin-bottom: clamp(1px, 0.7vw, 10px);
@@ -1778,7 +1551,7 @@ Countdown ends: ${config.endDateStr} Z
       --sep-size:        clamp(10px, 2.5cqw, 36px);
       --box-w:          clamp(14px, 3.7cqw, 53px);
       --box-h:          clamp(20px, 5.5cqw, 80px);
-      --box-radius:      clamp(2px, 0.55cqw, 8px);
+      --box-radius:      clamp(4px, 0.55cqw, 8px);
       --box-gap:        clamp(1px, 0.28cqw, 4px);
       --group-gap:      clamp(4px, 1.25cqw, 18px);
       --sep-margin-bottom: clamp(1px, 0.7cqw, 10px);
@@ -1787,39 +1560,39 @@ Countdown ends: ${config.endDateStr} Z
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     .countdown-container {
-      --digit-size:      clamp(10px, 2.2vw, 20px);
-      --label-size:      clamp(6px, 1.1vw, 8px);
-      --sep-size:        clamp(8px, 1.8vw, 14px);
-      --box-w:          clamp(12px, 2.8vw, 24px);
-      --box-h:          clamp(16px, 4vw, 34px);
-      --box-radius:      clamp(1px, 0.4vw, 3px);
-      --box-gap:        clamp(1px, 0.2vw, 2px);
-      --group-gap:      clamp(3px, 0.8vw, 8px);
-      --sep-margin-bottom: clamp(1px, 0.3vw, 4px);
-      --label-gap:      clamp(1px, 0.2vw, 2px);
-      --title-gap:      clamp(3px, 0.8vw, 6px);
+      --digit-size:      clamp(14px, 4.8vw, 20px);
+      --label-size:      clamp(6px, 2.1vw, 8px);
+      --sep-size:        clamp(10px, 3.7vw, 16px);
+      --box-w:          clamp(16px, 5.8vw, 24px);
+      --box-h:          clamp(24px, 8.5vw, 34px);
+      --box-radius:      4px;
+      --box-gap:        clamp(1px, 0.5vw, 2px);
+      --group-gap:      clamp(6px, 2.1vw, 10px);
+      --sep-margin-bottom: clamp(1px, 1vw, 4px);
+      --label-gap:      clamp(1px, 0.5vw, 2px);
+      --title-gap:      clamp(3px, 1.5vw, 6px);
       
-      --timer-top:      48%;
+      --timer-top:      50%;
       --timer-left:     50%;
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     @supports (width: 1cqw) {
       .countdown-container {
-        --digit-size:      clamp(10px, 2.2cqw, 20px);
-        --label-size:      clamp(6px, 1.1cqw, 8px);
-        --sep-size:        clamp(8px, 1.8cqw, 14px);
-        --box-w:          clamp(12px, 2.8cqw, 24px);
-        --box-h:          clamp(16px, 4cqw, 34px);
-        --box-radius:      clamp(1px, 0.4cqw, 3px);
-        --box-gap:        clamp(1px, 0.2cqw, 2px);
-        --group-gap:      clamp(3px, 0.8cqw, 8px);
-        --sep-margin-bottom: clamp(1px, 0.3cqw, 4px);
-        --label-gap:      clamp(1px, 0.2cqw, 2px);
-        --title-gap:      clamp(3px, 0.8cqw, 6px);
+        --digit-size:      clamp(14px, 4.8cqw, 20px);
+        --label-size:      clamp(6px, 2.1cqw, 8px);
+        --sep-size:        clamp(10px, 3.7cqw, 16px);
+        --box-w:          clamp(16px, 5.8cqw, 24px);
+        --box-h:          clamp(24px, 8.5cqw, 34px);
+        --box-radius:      4px;
+        --box-gap:        clamp(1px, 0.5cqw, 2px);
+        --group-gap:      clamp(6px, 2.1cqw, 10px);
+        --sep-margin-bottom: clamp(1px, 1cqw, 4px);
+        --label-gap:      clamp(1px, 0.5cqw, 2px);
+        --title-gap:      clamp(3px, 1.5cqw, 6px);
       }
     }
   }
@@ -1865,7 +1638,7 @@ Countdown ends: ${config.endDateStr} Z
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     .countdown-title {
       font-size:     clamp(9px, 2.2vw, 15px) !important;
       letter-spacing: 1px !important;
@@ -1934,10 +1707,15 @@ Countdown ends: ${config.endDateStr} Z
     font-weight:     700;
     color:           var(--sep-color);
     align-self:      flex-end;
-    margin-bottom:   var(--sep-margin-bottom);
+    margin-bottom:   calc((var(--box-h) - var(--sep-size)) / 2);
     line-height:     1;
     opacity:         0.9;
     animation:       timeBlink 1s step-end infinite;
+    width:           0;
+    display:         inline-flex;
+    justify-content: center;
+    margin-left:     calc(-1 * var(--group-gap) / 2);
+    margin-right:    calc(-1 * var(--group-gap) / 2);
   }
 
   @keyframes timeBlink {
@@ -2089,7 +1867,7 @@ Countdown ends: ${config.endDateStr} Z
     --sep-size:        clamp(10px, 2.5vw, 36px);
     --box-w:          clamp(14px, 3.7vw, 53px);
     --box-h:          clamp(20px, 5.5vw, 80px);
-    --box-radius:      clamp(2px, 0.55vw, 8px);
+    --box-radius:      clamp(4px, 0.55vw, 8px);
     --box-gap:        clamp(1px, 0.28vw, 4px);
     --group-gap:      clamp(4px, 1.25vw, 18px);
     --sep-margin-bottom: clamp(1px, 0.7vw, 10px);
@@ -2104,11 +1882,41 @@ Countdown ends: ${config.endDateStr} Z
       --sep-size:        clamp(10px, 2.5cqw, 36px);
       --box-w:          clamp(14px, 3.7cqw, 53px);
       --box-h:          clamp(20px, 5.5cqw, 80px);
-      --box-radius:      clamp(2px, 0.55cqw, 8px);
+      --box-radius:      clamp(4px, 0.55cqw, 8px);
       --box-gap:        clamp(1px, 0.28cqw, 4px);
       --group-gap:      clamp(4px, 1.25cqw, 18px);
       --sep-margin-bottom: clamp(1px, 0.7cqw, 10px);
       --label-gap:      clamp(2px, 0.4cqw, 6px);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .cdr-banner {
+      --digit-size:      clamp(14px, 4.8vw, 20px);
+      --label-size:      clamp(6px, 2.1vw, 8px);
+      --sep-size:        clamp(10px, 3.7vw, 16px);
+      --box-w:          clamp(16px, 5.8vw, 24px);
+      --box-h:          clamp(24px, 8.5vw, 34px);
+      --box-radius:      4px;
+      --box-gap:        clamp(1px, 0.5vw, 2px);
+      --group-gap:      clamp(6px, 2.1vw, 10px);
+      --label-gap:      clamp(1px, 0.5vw, 2px);
+    }
+  }
+
+  @media (max-width: 480px) {
+    @supports (width: 1cqw) {
+      .cdr-banner {
+        --digit-size:      clamp(14px, 4.8cqw, 20px);
+        --label-size:      clamp(6px, 2.1cqw, 8px);
+        --sep-size:        clamp(10px, 3.7cqw, 16px);
+        --box-w:          clamp(16px, 5.8cqw, 24px);
+        --box-h:          clamp(24px, 8.5cqw, 34px);
+        --box-radius:      4px;
+        --box-gap:        clamp(1px, 0.5cqw, 2px);
+        --group-gap:      clamp(6px, 2.1cqw, 10px);
+        --label-gap:      clamp(1px, 0.5cqw, 2px);
+      }
     }
   }
 
@@ -2205,10 +2013,15 @@ Countdown ends: ${config.endDateStr} Z
     font-weight:     700;
     color:           var(--sep-color);
     align-self:      flex-end;
-    margin-bottom:   var(--sep-margin-bottom);
+    margin-bottom:   calc((var(--box-h) - var(--sep-size)) / 2);
     line-height:     1;
     opacity:         0.9;
     animation:       cdrBlink 1s step-end infinite;
+    width:           0;
+    display:         inline-flex;
+    justify-content: center;
+    margin-left:     calc(-1 * var(--group-gap) / 2);
+    margin-right:    calc(-1 * var(--group-gap) / 2);
   }
 
   @keyframes cdrBlink {
@@ -2248,7 +2061,10 @@ Countdown ends: ${config.endDateStr} Z
      data-source="${config.source}" 
      data-url="${config.linkUrl}">
      
-    <img src="${config.bgImage}" class="cdr-bg-img" alt="Banner">
+    <picture>
+      ${config.bgImageMobile ? `<source media="(max-width: 480px)" srcset="${config.bgImageMobile}">` : ''}
+      <img src="${config.bgImage}" class="cdr-bg-img" alt="Banner">
+    </picture>
     
     <div class="cdr-timer">
       <div class="cdr-group">
@@ -2258,10 +2074,9 @@ Countdown ends: ${config.endDateStr} Z
           <span class="cdr-digit cdr-d1">0</span>
         </div>
       </div>
-      <span class="cdr-sep">:</span>
 
       <div class="cdr-group">
-        <span class="cdr-label">Horas</span>
+        <span class="cdr-label">Hs</span>
         <div class="cdr-digits">
           <span class="cdr-digit cdr-h0">0</span>
           <span class="cdr-digit cdr-h1">0</span>
@@ -2270,7 +2085,7 @@ Countdown ends: ${config.endDateStr} Z
       <span class="cdr-sep">:</span>
 
       <div class="cdr-group">
-        <span class="cdr-label">Minutos</span>
+        <span class="cdr-label">Min</span>
         <div class="cdr-digits">
           <span class="cdr-digit cdr-m0">0</span>
           <span class="cdr-digit cdr-m1">0</span>
@@ -2279,7 +2094,7 @@ Countdown ends: ${config.endDateStr} Z
       <span class="cdr-sep">:</span>
 
       <div class="cdr-group">
-        <span class="cdr-label">Segundos</span>
+        <span class="cdr-label">Seg</span>
         <div class="cdr-digits">
           <span class="cdr-digit cdr-s0">0</span>
           <span class="cdr-digit cdr-s1">0</span>
@@ -2436,6 +2251,7 @@ Countdown ends: ${config.endDateStr} Z
         endDate: '2026-06-11T17:30:00',
         expiredMsg: '¡La promoción ha finalizado!',
         bgImage: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png',
+        bgImageMobile: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/d720e4d6-19cd-4dbd-949f-b2bc82829f94.png',
         linkUrl: '/mundial',
         campaign: 'mundial-2026-dexter',
         source: 'banner-countdown',
@@ -2450,6 +2266,7 @@ Countdown ends: ${config.endDateStr} Z
         endDate: '2026-06-18T23:59:59',
         expiredMsg: '¡Hot Sale ha terminado!',
         bgImage: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png', // Fallback to mundial since it is original asset image
+        bgImageMobile: '',
         linkUrl: '/hot-sale',
         campaign: 'hotsale-2026',
         source: 'banner-countdown',
@@ -2464,6 +2281,7 @@ Countdown ends: ${config.endDateStr} Z
         endDate: '2026-11-27T00:00:00',
         expiredMsg: '¡Ofertas finalizadas!',
         bgImage: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png',
+        bgImageMobile: '',
         linkUrl: '/black-friday',
         campaign: 'blackfriday-2026',
         source: 'banner-countdown',
@@ -2478,6 +2296,7 @@ Countdown ends: ${config.endDateStr} Z
         endDate: '2026-11-02T23:59:00',
         expiredMsg: '¡El tiempo se agotó!',
         bgImage: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png',
+        bgImageMobile: '',
         linkUrl: '/cyber-monday',
         campaign: 'cyber-monday-2026',
         source: 'banner-countdown',
@@ -2513,6 +2332,18 @@ Countdown ends: ${config.endDateStr} Z
         const reader = new FileReader();
         reader.onload = function(e) {
           document.getElementById('bg-image-url').value = e.target.result;
+          triggerUpdate();
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // Image upload local (Mobile)
+    function handleLocalImageMobile(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('bg-image-url-mobile').value = e.target.result;
           triggerUpdate();
         };
         reader.readAsDataURL(input.files[0]);
@@ -2570,6 +2401,7 @@ Countdown ends: ${config.endDateStr} Z
       
       // Images and Links
       document.getElementById('bg-image-url').value = config.bgImage;
+      document.getElementById('bg-image-url-mobile').value = config.bgImageMobile || '';
       document.getElementById('link-url').value = config.linkUrl;
       document.getElementById('utm-campaign').value = config.campaign;
       document.getElementById('utm-source').value = config.source;
@@ -2639,6 +2471,7 @@ Countdown ends: ${config.endDateStr} Z
         expiredMsg: document.getElementById('expired-message').value,
         titleText: document.getElementById('title-text').value,
         bgImage: document.getElementById('bg-image-url').value,
+        bgImageMobile: document.getElementById('bg-image-url-mobile').value,
         linkUrl: document.getElementById('link-url').value,
         campaign: document.getElementById('utm-campaign').value,
         source: document.getElementById('utm-source').value,
@@ -2838,6 +2671,7 @@ Countdown ends: ${config.endDateStr} Z
           document.getElementById('end-date').value = (config.isoDate || '').substring(0, 16);
           document.getElementById('expired-message').value = config.expiredMsg || '';
           document.getElementById('bg-image-url').value = config.bgImage || '';
+          document.getElementById('bg-image-url-mobile').value = config.bgImageMobile || '';
           document.getElementById('link-url').value = config.linkUrl || '';
           document.getElementById('utm-campaign').value = config.campaign || '';
           document.getElementById('utm-source').value = config.source || '';
@@ -2873,14 +2707,11 @@ Countdown ends: ${config.endDateStr} Z
 
     // DOM Setup and listeners
     window.addEventListener('DOMContentLoaded', () => {
-      // Check for security access check first
-      checkSecurityAccess();
-
       setInitialDate();
       
       // Attach listeners to input changes
       const inputs = [
-        'title-text', 'end-date', 'expired-message', 'bg-image-url', 
+        'title-text', 'end-date', 'expired-message', 'bg-image-url', 'bg-image-url-mobile',
         'link-url', 'utm-campaign', 'utm-source', 'utm-medium'
       ];
       inputs.forEach(id => {
