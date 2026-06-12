@@ -3,64 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SFCC Countdown Customizer & Previewer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <title>Countdown Studio — SFCC Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #080c14;
-      --card-bg: rgba(15, 23, 42, 0.65);
+      --ink: #090B10;
+      --surface: #11141C;
+      --surface-raised: #181C26;
+      --surface-hover: #1E2330;
+      --paper: #F3F0E8;
+      --paper-raised: #FFFFFF;
+      --signal: #0088FF;
+      --signal-hover: #0077EE;
+      --signal-dim: rgba(0, 136, 255, 0.14);
+      --tick: #00C4A7;
+      --tick-dim: rgba(0, 196, 167, 0.12);
+      --bg-color: var(--ink);
+      --card-bg: var(--surface-raised);
       --card-border: rgba(255, 255, 255, 0.08);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --accent: #3b82f6;
-      --accent-hover: #2563eb;
-      --accent-gradient: linear-gradient(135deg, #3b82f6, #06b6d4);
-      --success: #10b981;
-      --sidebar-width: 450px;
+      --section-divider: rgba(255, 255, 255, 0.06);
+      --text-main: #ECEAE4;
+      --text-muted: #7B808C;
+      --accent: var(--signal);
+      --accent-hover: var(--signal-hover);
+      --accent-gradient: linear-gradient(135deg, #0088FF 0%, #33A0FF 100%);
+      --success: #00C4A7;
+      --sidebar-width: 400px;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
     }
 
     body.light-theme {
-      --bg-color: #f8fafc;
-      --card-bg: rgba(255, 255, 255, 0.85);
-      --card-border: rgba(15, 23, 42, 0.08);
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --accent: #2563eb;
-      --accent-hover: #1d4ed8;
-      --accent-gradient: linear-gradient(135deg, #2563eb, #06b6d4);
+      --ink: #F3F0E8;
+      --surface: #EAE6DC;
+      --surface-raised: #FFFFFF;
+      --surface-hover: #F7F5F0;
+      --bg-color: var(--paper);
+      --card-bg: var(--paper-raised);
+      --card-border: rgba(20, 18, 14, 0.09);
+      --section-divider: rgba(20, 18, 14, 0.07);
+      --text-main: #14120E;
+      --text-muted: #6B6560;
+      --signal-dim: rgba(0, 136, 255, 0.08);
+      --tick-dim: rgba(0, 148, 128, 0.1);
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
     body {
-      font-family: 'Outfit', sans-serif;
+      font-family: var(--font-body);
       background-color: var(--bg-color);
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
+      background-image:
+        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.018) 79px, rgba(255,255,255,0.018) 80px);
       color: var(--text-main);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: background-color 0.35s ease, color 0.35s ease;
     }
 
     body.light-theme {
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.04) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.03) 0px, transparent 50%);
+      background-image:
+        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(20,18,14,0.04) 79px, rgba(20,18,14,0.04) 80px);
     }
 
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* ── Header ── */
     header {
-      background: rgba(13, 13, 13, 0.8);
-      backdrop-filter: blur(12px);
+      background: var(--surface);
       border-bottom: 1px solid var(--card-border);
-      padding: 12px 32px;
+      padding: 0 24px;
+      height: 60px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -68,11 +96,58 @@
       top: 0;
       z-index: 100;
       flex-shrink: 0;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     body.light-theme header {
-      background: rgba(243, 244, 246, 0.85);
+      background: var(--paper-raised);
+    }
+
+    .header-title-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .studio-mark {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .studio-mark__digits {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--signal);
+      background: var(--signal-dim);
+      border: 1px solid rgba(0, 136, 255, 0.25);
+      padding: 6px 8px;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.12em;
+      line-height: 1;
+      animation: tickPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes tickPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+
+    .header-title-area h1 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .header-title-area p {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
     }
 
     .header-main-row {
@@ -82,255 +157,233 @@
     }
 
     .header-badge {
-      background: rgba(59, 130, 246, 0.15);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      color: #a5b4fc;
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 12px;
-      letter-spacing: 0.05em;
-      transition: all 0.3s ease;
+      background: var(--tick-dim);
+      border: 1px solid rgba(0, 196, 167, 0.3);
+      color: var(--tick);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 4px;
+      letter-spacing: 0.06em;
     }
 
-    body.light-theme .header-badge {
-      background: rgba(37, 99, 235, 0.1);
-      border-color: rgba(37, 99, 235, 0.25);
-      color: #2563eb;
-    }
-
-    .header-title-area h1 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      background: linear-gradient(to right, #fff, #a5b4fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .header-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
-      transition: background-image 0.3s ease;
+      gap: 12px;
     }
 
-    body.light-theme .header-title-area h1 {
-      background: linear-gradient(to right, #0f172a, #2563eb);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .header-title-area p {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 1px;
-    }
-
-    /* Theme Toggle Button Header */
     .theme-toggle-btn-header {
-      background: rgba(255, 255, 255, 0.06);
+      background: var(--surface-raised);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 10px;
-      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      transition: border-color 0.2s ease, background 0.2s ease;
     }
 
     body.light-theme .theme-toggle-btn-header {
-      background: rgba(0, 0, 0, 0.04);
-      border-color: rgba(18, 36, 89, 0.12);
-      color: var(--text-main);
+      background: var(--paper);
     }
 
     .theme-toggle-btn-header:hover {
-      background: rgba(59, 130, 246, 0.1);
-      border-color: var(--accent);
-      transform: scale(1.05);
+      border-color: var(--signal);
+      background: var(--signal-dim);
     }
 
-    .theme-toggle-btn-header .sun-icon {
-      display: block;
-      color: #fbbf24;
+    .theme-toggle-btn-header:focus-visible {
+      outline: 2px solid var(--signal);
+      outline-offset: 2px;
     }
 
-    .theme-toggle-btn-header .moon-icon {
-      display: none;
-      color: #2563eb;
-    }
+    .theme-toggle-btn-header .sun-icon { display: block; color: #60A5FA; }
+    .theme-toggle-btn-header .moon-icon { display: none; color: var(--text-main); }
+    body.light-theme .theme-toggle-btn-header .sun-icon { display: none; }
+    body.light-theme .theme-toggle-btn-header .moon-icon { display: block; }
 
-    body.light-theme .theme-toggle-btn-header .sun-icon {
-      display: none;
-    }
-
-    body.light-theme .theme-toggle-btn-header .moon-icon {
-      display: block;
-    }
-
-    /* Branded Header Widget with Contrast for Solu logo */
     .header-branding-area {
       display: flex;
       align-items: center;
-      gap: 20px;
-      background: rgba(15, 23, 42, 0.55); /* Dark background in dark mode */
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 8px 18px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      transition: background-color 0.3s ease, border-color 0.3s ease;
+      gap: 14px;
+      background: var(--surface-raised);
+      border: 1px solid var(--card-border);
+      padding: 6px 14px;
+      border-radius: var(--radius-md);
     }
 
     body.light-theme .header-branding-area {
-      background: rgba(255, 255, 255, 0.9);
-      border-color: rgba(15, 23, 42, 0.1);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      background: var(--paper);
     }
 
     .brand-divider {
       width: 1px;
-      height: 30px;
-      background: rgba(255, 255, 255, 0.1);
-      transition: background-color 0.3s ease;
+      height: 24px;
+      background: var(--card-border);
     }
 
-    body.light-theme .brand-divider {
-      background: rgba(15, 23, 42, 0.1);
-    }
-
-    /* Override developer credits for visibility in both themes */
     .header-branding-area .developer-info span:first-child {
       color: var(--text-muted);
-      transition: color 0.3s ease;
-    }
-
-    body.light-theme .header-branding-area .developer-info span:first-child {
-      color: #64748b;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
     .header-branding-area .dev-link {
-      color: #3b82f6;
-      transition: color 0.3s ease;
-    }
-
-    body.light-theme .header-branding-area .dev-link {
-      color: #2563eb;
-    }
-
-    .header-branding-area .dev-link:hover {
-      color: #2563eb;
-      text-shadow: 0 0 8px rgba(59, 130, 246, 0.15);
-    }
-
-    body.light-theme .header-branding-area .dev-link:hover {
-      color: #3b82f6;
-    }
-
-    .header-branding-area .dev-role {
-      color: var(--text-muted) !important;
-      transition: color 0.3s ease;
-    }
-
-    body.light-theme .header-branding-area .dev-role {
-      color: #64748b !important;
-    }
-
-    .presets-container {
-      display: flex;
-      gap: 10px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.8rem;
+      display: inline-flex;
       align-items: center;
+      gap: 4px;
+      transition: color 0.2s ease;
     }
 
+    .header-branding-area .dev-link:hover { color: var(--signal); }
+    .header-branding-area .dev-role { color: var(--text-muted) !important; font-size: 0.65rem !important; }
+
+    .brand-logo-container {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+    }
+
+    body.light-theme .brand-logo-container {
+      background: transparent;
+      padding: 0;
+    }
+
+    .brand-logo { height: 22px; width: auto; }
+
+    /* ── Presets ── */
     .presets-sidebar-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .presets-sidebar-grid .preset-btn {
-      width: 100%;
-      text-align: center;
-      padding: 8px;
-      border-radius: 8px;
-    }
-
-    .presets-label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
+      gap: 6px;
     }
 
     .preset-btn {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--surface);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 500;
+      padding: 10px;
+      border-radius: var(--radius-md);
+      font-size: 0.78rem;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    body.light-theme .preset-btn {
-      background: rgba(15, 23, 42, 0.05);
-      border-color: rgba(15, 23, 42, 0.1);
-      color: #0f172a;
-    }
-
-    body.light-theme .preset-btn:hover {
-      background: rgba(15, 23, 42, 0.08);
-      border-color: var(--accent);
+      text-align: left;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+      font-family: inherit;
     }
 
     .preset-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: var(--accent);
+      border-color: rgba(0, 136, 255, 0.4);
+      background: var(--surface-hover);
       transform: translateY(-1px);
     }
 
-    /* Collapsible Cards Styling */
+    .preset-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .preset-label {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .preset-label-name {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .preset-label-tag {
+      font-size: 0.64rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .preset-btn.reset-btn {
+      grid-column: 1 / -1;
+      justify-content: center;
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #F87171;
+      background: rgba(239, 68, 68, 0.06);
+      margin-top: 2px;
+    }
+
+    .preset-btn.reset-btn:hover {
+      background: rgba(239, 68, 68, 0.14) !important;
+      border-color: #EF4444 !important;
+      color: #FCA5A5 !important;
+      transform: none;
+    }
+
+    body.light-theme .preset-btn.reset-btn:hover {
+      color: #DC2626 !important;
+    }
+
+    /* ── Collapsible pipeline cards ── */
     .collapsible-card {
       overflow: hidden;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: border-color 0.2s ease;
     }
-    
+
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
       user-select: none;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      transition: background 0.15s ease;
     }
 
-    .collapsible-card .section-title {
-      margin-bottom: 0;
-    }
+    .card-header:hover { background: var(--surface-hover); }
 
     .chevron-icon {
       color: var(--text-muted);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
     }
 
-    .collapsible-card.collapsed .chevron-icon {
-      transform: rotate(-180deg);
-    }
+    .collapsible-card.collapsed .chevron-icon { transform: rotate(-90deg); }
 
     .card-content {
       max-height: 1200px;
       opacity: 1;
       overflow: visible;
-      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin-top 0.3s ease;
-      margin-top: 16px;
+      transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.25s ease;
+      padding: 0 14px 14px;
     }
 
     .collapsible-card.collapsed .card-content {
       max-height: 0;
       opacity: 0;
-      margin-top: 0;
+      padding-bottom: 0;
       overflow: hidden;
       pointer-events: none;
     }
@@ -340,100 +393,132 @@
       flex: 1;
       overflow: hidden;
       position: relative;
+      min-height: calc(100vh - 60px);
     }
 
-    /* Form / Sidebar controls */
+    /* ── Sidebar ── */
     .sidebar {
       width: var(--sidebar-width);
       border-right: 1px solid var(--card-border);
-      background: rgba(13, 13, 13, 0.55);
-      backdrop-filter: blur(20px);
+      background: var(--surface);
       display: flex;
       flex-direction: column;
-      height: 100%;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
+      flex-shrink: 0;
     }
 
-    body.light-theme .sidebar {
-      background: rgba(255, 255, 255, 0.45);
-    }
+    body.light-theme .sidebar { background: var(--surface); }
 
     .sidebar-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 24px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .sidebar-scroll::-webkit-scrollbar {
-      width: 6px;
-    }
-    .sidebar-scroll::-webkit-scrollbar-track {
-      background: transparent;
-    }
+    .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+    .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
     .sidebar-scroll::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
+      border-radius: 2px;
+    }
+    body.light-theme .sidebar-scroll::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-section-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      padding: 4px 2px 8px;
     }
 
     .section-title {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      margin-bottom: 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .form-group {
-      margin-bottom: 20px;
+    .section-step {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 500;
+      color: var(--signal);
+      background: var(--signal-dim);
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
+
+    .section-title svg {
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .form-group { margin-bottom: 16px; }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
     label {
       display: block;
-      font-size: 0.85rem;
-      font-weight: 500;
+      font-size: 0.78rem;
+      font-weight: 600;
       margin-bottom: 6px;
       color: var(--text-main);
+      letter-spacing: 0.01em;
     }
 
     input[type="text"],
     input[type="datetime-local"],
     select {
       width: 100%;
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--surface);
       border: 1px solid var(--card-border);
-      border-radius: 8px;
-      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
       color: var(--text-main);
       font-family: inherit;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
+      font-size: 0.84rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     body.light-theme input[type="text"],
     body.light-theme input[type="datetime-local"],
     body.light-theme select {
-      background: rgba(255, 255, 255, 0.85);
-      border-color: rgba(18, 36, 89, 0.15);
+      background: var(--paper);
     }
 
     input[type="text"]:focus,
     input[type="datetime-local"]:focus,
     select:focus {
       outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--signal);
+      box-shadow: 0 0 0 3px var(--signal-dim);
+    }
+
+    input:focus-visible,
+    button:focus-visible,
+    .preset-btn:focus-visible,
+    .device-btn:focus-visible,
+    .action-btn:focus-visible {
+      outline: 2px solid var(--signal);
+      outline-offset: 2px;
     }
 
     /* Color Pickers wrapper */
@@ -444,42 +529,40 @@
     }
 
     .color-preview-box {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 8px;
       border: 1px solid var(--card-border);
       position: relative;
       cursor: pointer;
       overflow: hidden;
       flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
     .color-preview-box input[type="color"] {
       position: absolute;
       top: -5px;
       left: -5px;
-      width: 50px;
-      height: 50px;
+      width: 55px;
+      height: 55px;
       border: 0;
       padding: 0;
       cursor: pointer;
     }
 
-
-    /* Template Radio Buttons */
+    /* Template selector */
     .template-selector {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 4px;
-      border-radius: 8px;
+      gap: 4px;
+      background: var(--surface);
+      padding: 3px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--card-border);
     }
 
-    .template-option {
-      position: relative;
-    }
+    .template-option { position: relative; }
 
     .template-option input {
       position: absolute;
@@ -492,56 +575,109 @@
     .template-option label {
       display: block;
       text-align: center;
-      padding: 8px;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 500;
+      padding: 9px 6px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
       cursor: pointer;
       margin: 0;
-      transition: all 0.2s ease;
+      transition: background 0.2s ease, color 0.2s ease;
       color: var(--text-muted);
     }
 
     .template-option input:checked + label {
       background: var(--accent-gradient);
       color: #fff;
-      font-weight: 600;
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+      font-weight: 700;
     }
 
-    /* Preview and Code Workspace */
+    /* ── Workspace ── */
     .workspace {
       flex: 1;
       display: flex;
       flex-direction: column;
-      height: 100%;
-      background: var(--bg-color);
+      min-width: 0;
+      background: var(--ink);
       position: relative;
-      transition: background-color 0.3s ease;
     }
 
-    /* Device simulator switcher */
+    body.light-theme .workspace { background: var(--paper); }
+
     .device-switcher {
-      background: rgba(17, 24, 39, 0.6);
+      background: var(--surface);
       border-bottom: 1px solid var(--card-border);
-      padding: 12px 24px;
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-shrink: 0;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
-    body.light-theme .device-switcher {
-      background: rgba(255, 255, 255, 0.55);
+    body.light-theme .device-switcher { background: var(--paper-raised); }
+
+    .preview-info {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--tick);
+      box-shadow: 0 0 0 3px var(--tick-dim);
+      animation: liveBlink 1.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes liveBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .device-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .bg-sim-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bg-sim-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .bg-sim-btns {
+      display: flex;
+      gap: 4px;
+      background: var(--surface-raised);
+      padding: 3px;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
     }
 
     .device-btns {
       display: flex;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.03);
+      gap: 2px;
+      background: var(--surface-raised);
       padding: 3px;
-      border-radius: 20px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--card-border);
     }
 
@@ -549,87 +685,101 @@
       background: transparent;
       border: 0;
       color: var(--text-muted);
-      padding: 6px 16px;
-      border-radius: 16px;
-      font-size: 0.8rem;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.74rem;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
+      gap: 5px;
+      transition: background 0.15s ease, color 0.15s ease;
+      font-family: inherit;
     }
+
+    .device-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
 
     .device-btn.active {
-      background: var(--accent);
+      background: var(--signal);
       color: #fff;
-      box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
     }
 
-    .device-btn svg {
-      width: 14px;
-      height: 14px;
+    .device-btn:hover:not(.active) {
+      background: var(--surface-hover);
+      color: var(--text-main);
     }
 
-    .preview-info {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* Preview area containing simulated device iframe */
+    /* Preview area */
     .preview-area {
       flex: 1;
-      padding: 30px;
+      padding: 32px 24px;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: auto;
       position: relative;
+      background-color: var(--ink);
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    body.light-theme .preview-area {
+      background-color: #E8E4DA;
+      background-image:
+        linear-gradient(rgba(20,18,14,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20,18,14,0.05) 1px, transparent 1px);
     }
 
     .device-frame-container {
       width: 100%;
       max-width: 100%;
       height: fit-content;
-      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 12px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      transition: width 0.35s ease;
+      border-radius: var(--radius-lg);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06),
+        0 32px 64px -16px rgba(0,0,0,0.7);
       border: 1px solid var(--card-border);
-      background: #1e293b;
+      background: #0D0F14;
       overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
+    body.light-theme .device-frame-container {
+      box-shadow:
+        0 0 0 1px rgba(20,18,14,0.08),
+        0 24px 48px -12px rgba(20,18,14,0.18);
+    }
+
     .device-header {
-      background: rgba(30, 41, 59, 0.9);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      padding: 8px 16px;
+      background: #161920;
+      border-bottom: 1px solid var(--card-border);
+      padding: 9px 16px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
+    body.light-theme .device-header {
+      background: #EAE6DC;
     }
-    .dot-red { background: #ef4444; }
-    .dot-yellow { background: #f59e0b; }
-    .dot-green { background: #10b981; }
+
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dot-red { background: #FF5F57; }
+    .dot-yellow { background: #FEBC2E; }
+    .dot-green { background: #28C840; }
 
     .device-title {
       color: var(--text-muted);
-      font-size: 0.75rem;
-      font-family: monospace;
-      margin-left: 10px;
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      margin-left: 8px;
       flex-grow: 1;
       text-align: center;
+      letter-spacing: 0.03em;
     }
 
     .preview-iframe {
@@ -638,107 +788,115 @@
       border: 0;
       background: #111;
       display: block;
-      transition: height 0.2s ease;
     }
 
-    /* Code area containing the generated code */
+    /* ── Code export dock ── */
     .code-section {
       height: 280px;
       border-top: 1px solid var(--card-border);
-      background: #090d16;
+      background: #080A0F;
       display: flex;
       flex-direction: column;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
+      transition: height 0.3s ease, background-color 0.3s ease;
     }
 
-    body.light-theme .code-section {
-      background: #f9fafb;
-    }
+    body.light-theme .code-section { background: var(--surface); }
 
     .code-header {
-      background: rgba(15, 23, 42, 0.8);
+      background: var(--surface-raised);
       border-bottom: 1px solid var(--card-border);
-      padding: 12px 24px;
+      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-
-    body.light-theme .code-header {
-      background: rgba(243, 244, 246, 0.8);
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .code-title {
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.8rem;
+      font-weight: 700;
       color: var(--text-main);
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .code-actions {
-      display: flex;
-      gap: 10px;
+    .code-title-tag {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 500;
+      color: var(--tick);
+      background: var(--tick-dim);
+      padding: 2px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
+    .code-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
     .action-btn {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--surface);
       border: 1px solid var(--card-border);
       color: var(--text-main);
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-size: 0.8rem;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.76rem;
       font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
-      transition: all 0.2s ease;
+      gap: 5px;
+      transition: border-color 0.15s ease, background 0.15s ease;
+      font-family: inherit;
     }
 
     .action-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--accent);
+      border-color: var(--signal);
+      background: var(--signal-dim);
     }
 
     .action-btn.primary {
       background: var(--accent-gradient);
       border: 0;
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+      color: #fff !important;
     }
 
     .action-btn.primary:hover {
-      opacity: 0.95;
-      transform: translateY(-0.5px);
+      opacity: 0.9;
+      background: var(--accent-gradient);
     }
 
     .code-editor-wrapper {
       flex: 1;
       position: relative;
       overflow: hidden;
-      margin: 0 24px 16px 24px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 8px;
-      background: #030508;
-      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.4);
+      margin: 0 16px 14px;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      background: #050608;
       display: flex;
       flex-direction: column;
+    }
+
+    body.light-theme .code-editor-wrapper {
+      background: var(--paper-raised);
     }
 
     .code-textarea {
       width: 100%;
       height: 100%;
-      background: #030508;
+      background: transparent;
       border: 0;
-      color: #9cdcfe;
-      font-family: 'Fira Code', 'Courier New', monospace;
-      font-size: 0.85rem;
-      padding: 16px;
+      color: transparent;
+      caret-color: var(--tick);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 14px;
       resize: none;
       outline: none;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .code-pre-highlight {
@@ -747,49 +905,60 @@
       left: 0;
       width: 100%;
       height: 100%;
-      padding: 16px;
-      font-family: 'Fira Code', 'Courier New', monospace;
-      font-size: 0.85rem;
-      line-height: 1.5;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.6;
       pointer-events: none;
       overflow: auto;
       white-space: pre-wrap;
       word-break: break-all;
-      background: #030508;
-      color: #cbd5e1;
+      background: #050608;
+      color: #8B919C;
     }
 
-    /* Basic token highlights */
-    .token-comment    { color: #6a9955; }
-    .token-tag        { color: #569cd6; }
-    .token-attr-name  { color: #9cdcfe; }
-    .token-attr-value { color: #ce9178; }
-    .token-string     { color: #ce9178; }
-    .token-keyword    { color: #c586c0; }
-    .token-number     { color: #b5cea8; }
+    body.light-theme .code-pre-highlight {
+      background: var(--paper-raised);
+      color: #4A4F58;
+    }
 
-    /* Divider */
+    .token-comment    { color: #5C6370; }
+    .token-tag        { color: #FF6B4A; }
+    .token-attr-name  { color: #00C4A7; }
+    .token-attr-value { color: #E8B84B; }
+    .token-string     { color: #E8B84B; }
+    .token-keyword    { color: #C792EA; }
+    .token-number     { color: #00C4A7; }
+
+    body.light-theme .token-tag        { color: #D4380D; }
+    body.light-theme .token-attr-name  { color: #007A6B; }
+    body.light-theme .token-attr-value { color: #B8860B; }
+    body.light-theme .token-string     { color: #9A6700; }
+
     .divider {
       height: 1px;
       background: var(--card-border);
-      margin: 16px 0;
+      margin: 12px 0;
     }
 
-    /* Helper info */
     .help-text {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
-      margin-top: 4px;
-      line-height: 1.4;
+      margin-top: 5px;
+      line-height: 1.45;
+      font-weight: 400;
     }
 
-    /* Glass Card styling */
     .glass-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 24px;
+      border-radius: var(--radius-md);
+      padding: 0;
+      overflow: hidden;
+    }
+
+    body.light-theme .glass-card {
+      box-shadow: 0 1px 3px rgba(20, 18, 14, 0.06);
     }
 
     /* Custom check switch */
@@ -842,187 +1011,120 @@
       border-radius: 50%;
     }
 
-    input:checked + .slider {
-      background-color: var(--accent);
-    }
+    input:checked + .slider { background-color: var(--signal); }
+    input:checked + .slider:before { transform: translateX(20px); }
 
-    input:checked + .slider:before {
-      transform: translateX(20px);
-    }
-
-    /* Copy toast notification */
+    /* Toast */
     .toast {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background: var(--success);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 8px;
+      bottom: 24px;
+      right: 24px;
+      background: var(--surface-raised);
+      border: 1px solid rgba(0, 196, 167, 0.35);
+      color: var(--text-main);
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+      font-size: 0.82rem;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4);
       display: flex;
       align-items: center;
       gap: 8px;
       z-index: 1000;
-      transform: translateY(100px);
+      transform: translateY(80px);
       opacity: 0;
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.3s ease, opacity 0.3s ease;
     }
 
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    .toast svg { color: var(--tick); flex-shrink: 0; }
+    .toast.show { transform: translateY(0); opacity: 1; }
 
-    .preset-btn.reset-btn:hover {
-      background: rgba(239, 68, 68, 0.15) !important;
-      border-color: #ef4444 !important;
-      color: #ffffff !important;
-    }
-
-    body.light-theme .preset-btn.reset-btn:hover {
-      color: #dc2626 !important;
-    }
-
-    /* Sidebar Branded Footer */
-    .sidebar-footer {
-      padding: 14px 20px;
-      border-top: 1px solid var(--card-border);
-      background: rgba(6, 8, 14, 0.95);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
-      flex-shrink: 0;
-      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
-    }
-    
     .developer-info {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
     }
-    
-    .developer-info span:first-child {
-      color: var(--text-muted);
-      font-size: 0.7rem;
-      font-weight: 500;
-    }
-    
+
     .dev-link {
-      color: #818cf8; /* Soft Indigo */
+      color: var(--text-main);
       font-weight: 600;
       text-decoration: none;
-      transition: all 0.2s ease;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-    }
-    
-    .dev-link:hover {
-      color: #a5b4fc;
-      text-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
-    }
-    
-    .dev-link svg {
-      opacity: 0.7;
-      transition: transform 0.2s ease;
-    }
-    
-    .dev-link:hover svg {
-      opacity: 1;
-      transform: translate(1px, -1px);
-    }
-    
-    .dev-role {
-      font-size: 0.65rem !important;
-      color: var(--text-muted) !important;
-      font-weight: 400;
-    }
-    
-    .brand-logo-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      background: #ffffff;
-      padding: 4px 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
+      transition: color 0.2s ease;
     }
 
-    body.light-theme .brand-logo-container {
-      background: transparent;
-      padding: 0;
-      box-shadow: none;
-    }
-    
-    .brand-label {
-      color: var(--text-muted);
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-weight: 600;
-    }
-    
-    .brand-logo {
-      height: 24px;
-      width: auto;
-      opacity: 0.95;
-      transition: all 0.2s ease;
-      filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.15));
-    }
-    
-    .brand-logo:hover {
-      opacity: 1;
-      filter: drop-shadow(0 2px 6px rgba(27, 37, 242, 0.15));
-    }
+    .dev-link:hover { color: var(--signal); }
+    .dev-role { font-size: 0.65rem !important; color: var(--text-muted) !important; }
 
-    /* Editor Tabs Styling */
+    /* Editor tabs */
     .editor-tabs {
-      background: #0d111a;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--surface);
+      border-bottom: 1px solid var(--card-border);
       display: flex;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       user-select: none;
-      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
-    body.light-theme .editor-tabs {
-      background: #e5e7eb;
-      border-bottom-color: rgba(15, 23, 42, 0.1);
-    }
-    
     .editor-tab {
-      padding: 8px 16px;
-      background: #030508;
+      padding: 7px 14px;
+      background: var(--surface-raised);
       color: var(--text-main);
-      border-right: 1px solid rgba(255, 255, 255, 0.05);
-      border-top: 2px solid var(--accent);
+      border-right: 1px solid var(--card-border);
+      border-top: 2px solid var(--signal);
       display: flex;
       align-items: center;
       gap: 6px;
+      font-family: var(--font-mono);
       font-weight: 500;
-      cursor: default;
-      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
 
-    body.light-theme .editor-tab {
-      background: #ffffff;
-      color: #0f172a;
-      border-right-color: rgba(15, 23, 42, 0.08);
-    }
-    
-    .tab-icon {
-      font-weight: bold;
-      font-size: 0.8rem;
+    .tab-icon { color: var(--signal); font-size: 0.75rem; }
+
+    .code-section.collapsed { height: 46px !important; overflow: hidden; }
+    .code-section.collapsed .code-editor-wrapper { opacity: 0; pointer-events: none; }
+    .code-section .collapse-btn svg { transition: transform 0.25s ease; }
+    .code-section.collapsed .collapse-btn svg { transform: rotate(180deg); }
+
+    .bg-sim-btn {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      padding: 0;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
     }
 
+    .bg-sim-btn.active {
+      transform: scale(1.12);
+      box-shadow: 0 0 0 2px var(--signal);
+    }
 
+    /* Responsive */
+    @media (max-width: 900px) {
+      .main-layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        max-height: 45vh;
+        border-right: 0;
+        border-bottom: 1px solid var(--card-border);
+      }
+      .header-branding-area .developer-info { display: none; }
+      .brand-divider { display: none; }
+      .header-title-area p { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 0 14px; }
+      .presets-sidebar-grid { grid-template-columns: 1fr; }
+      .device-switcher { padding: 8px 12px; }
+      .preview-area { padding: 16px 12px; }
+      .code-header { padding: 8px 12px; }
+      .code-editor-wrapper { margin: 0 10px 10px; }
+    }
   </style>
 </head>
 <body>
@@ -1039,48 +1141,44 @@
 
   <header>
     <div class="header-title-area">
-      <div class="header-main-row">
-        <h1>
-          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-          </svg>
-          SFCC Countdown Builder
-        </h1>
-        <div class="header-badge">v1.3</div>
+      <div class="studio-mark">
+        <span class="studio-mark__digits" aria-hidden="true">00:00</span>
+        <div>
+          <div class="header-main-row">
+            <h1>Countdown Studio</h1>
+            <div class="header-badge">v2.0</div>
+          </div>
+          <p>Constructor de Content Assets para SFCC</p>
+        </div>
       </div>
-      <p>Customiza, previsualiza y exporta módulos de cuenta regresiva en segundos</p>
     </div>
-    
-    <div style="display: flex; align-items: center; gap: 16px;">
-      <!-- Theme Switcher Button -->
-      <button type="button" id="theme-toggle" class="theme-toggle-btn-header" onclick="toggleTheme()" title="Cambiar Tema">
-        <!-- Sun Icon (visible in dark mode to switch to light) -->
-        <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+
+    <div class="header-actions">
+      <button type="button" id="theme-toggle" class="theme-toggle-btn-header" onclick="toggleTheme()" title="Cambiar tema" aria-label="Cambiar tema">
+        <svg class="sun-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
         </svg>
-        <!-- Moon Icon (visible in light mode to switch to dark) -->
-        <svg class="moon-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <svg class="moon-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
         </svg>
       </button>
 
-      <!-- Header Right: Branded Identity -->
       <div class="header-branding-area">
         <div class="developer-info">
           <span>Desarrollado por</span>
-          <a href="https://www.linkedin.com/in/torresuranga/" target="_blank" class="dev-link">
+          <a href="https://www.linkedin.com/in/torresuranga/" target="_blank" rel="noopener" class="dev-link">
             Carlos Torres
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
               <polyline points="15 3 21 3 21 9"></polyline>
               <line x1="10" y1="14" x2="21" y2="3"></line>
             </svg>
           </a>
-          <span class="dev-role">Salesforce Marketing Cloud Specialist</span>
+          <span class="dev-role">SFMC Specialist</span>
         </div>
         <div class="brand-divider"></div>
         <div class="brand-logo-container">
-          <img src="https://image.grupodabra.com/lib/fe37157175640478731176/m/1/f39e000f-2e8b-40b2-9e37-d2571fb6616b.png" class="brand-logo" alt="Solu Logo">
+          <img src="https://image.grupodabra.com/lib/fe37157175640478731176/m/1/f39e000f-2e8b-40b2-9e37-d2571fb6616b.png" class="brand-logo" alt="Solu">
         </div>
       </div>
     </div>
@@ -1091,40 +1189,16 @@
     <!-- Sidebar form controls -->
     <aside class="sidebar">
       <div class="sidebar-scroll">
-        
-        <!-- Sección Presets y Acciones -->
+
+        <p class="sidebar-section-label">Configuración</p>
         <div class="glass-card collapsible-card">
           <div class="card-header" onclick="toggleCard(this)">
             <div class="section-title">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
-              </svg>
-              Presets de Campaña
-            </div>
-            <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </div>
-          <div class="card-content">
-            <div class="presets-sidebar-grid">
-              <button class="preset-btn" onclick="loadPreset('mundial')">Dexter Mundial</button>
-              <button class="preset-btn" onclick="loadPreset('hotsale')">Hot Sale Naranja</button>
-              <button class="preset-btn" onclick="loadPreset('blackfriday')">Black Friday</button>
-              <button class="preset-btn" onclick="loadPreset('cyber')">Cyber Neon</button>
-            </div>
-            <div class="divider" style="margin: 12px 0;"></div>
-            <button class="preset-btn reset-btn" onclick="resetToOriginal()" style="width: 100%; border-color: rgba(239, 68, 68, 0.4); color: #f87171; background: rgba(239, 68, 68, 0.05); margin-top: 4px; padding: 10px; border-radius: 8px;">Restablecer Configuración ↺</button>
-          </div>
-        </div>
-        
-        <!-- Sección Plantilla -->
-        <div class="glass-card collapsible-card">
-          <div class="card-header" onclick="toggleCard(this)">
-            <div class="section-title">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <span class="section-step">1</span>
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
               </svg>
-              1. Tipo de Plantilla
+              Tipo de plantilla
             </div>
             <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
@@ -1147,14 +1221,14 @@
           </div>
         </div>
 
-        <!-- Configuración de Tiempos -->
         <div class="glass-card collapsible-card">
           <div class="card-header" onclick="toggleCard(this)">
             <div class="section-title">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <span class="section-step">2</span>
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
-              2. Tiempo y Estado Final
+              Tiempo y estado final
             </div>
             <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
@@ -1185,14 +1259,14 @@
           </div>
         </div>
 
-        <!-- Contenido y Enlaces -->
         <div class="glass-card collapsible-card collapsed">
           <div class="card-header" onclick="toggleCard(this)">
             <div class="section-title">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <span class="section-step">3</span>
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
               </svg>
-              3. Imagen y Enlace de Destino
+              Imagen y enlace
             </div>
             <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
@@ -1206,13 +1280,13 @@
 
             <div class="form-group">
               <label for="bg-image-url">URL de Imagen de Fondo</label>
-              <input type="text" id="bg-image-url" value="https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png">
+              <input type="text" id="bg-image-url" value="https://bdtf-stg.my.commercecloud.salesforce.com/on/demandware.static/-/Sites-Dexter-Library/default/dw6eb7b5a1/Contador%20Mundial%202026/Contador%20Arranc%C3%B3%20el%20mundial.png">
               <p class="help-text">Introduce la URL absoluta de tu librería de SFCC/Cloudinary, o sube una temporal para visualizarla en vivo.</p>
             </div>
 
             <div class="form-group">
               <label for="bg-image-url-mobile">URL de Imagen de Fondo (Mobile)</label>
-              <input type="text" id="bg-image-url-mobile" value="">
+              <input type="text" id="bg-image-url-mobile" value="https://bdtf-stg.my.commercecloud.salesforce.com/on/demandware.static/-/Sites-Dexter-Library/default/dwe8512f3f/Contador%20Mundial%202026/Contador%20mobile%20arranco%20el%20mundial.png">
               <p class="help-text">Opcional. Imagen optimizada para pantallas verticales (Max 768px de ancho).</p>
             </div>
 
@@ -1239,14 +1313,14 @@
           </div>
         </div>
 
-        <!-- Diseño y Colores -->
         <div class="glass-card collapsible-card collapsed">
           <div class="card-header" onclick="toggleCard(this)">
             <div class="section-title">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <span class="section-step">4</span>
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
               </svg>
-              4. Estilos y Colores
+              Estilos y colores
             </div>
             <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
@@ -1291,25 +1365,36 @@
     <!-- Workspace preview & output -->
     <main class="workspace">
       
-      <!-- Device switcher bar -->
       <div class="device-switcher">
         <div class="preview-info">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-          </svg>
-          Vista Previa en Tiempo Real
+          <span class="live-dot" aria-hidden="true"></span>
+          Vista previa en vivo
         </div>
-        <div class="device-btns">
-          <button class="device-btn active" onclick="setDeviceWidth('100%', this)">
-            💻 Desktop (100%)
-          </button>
-          <button class="device-btn" onclick="setDeviceWidth('768px', this)">
-            📱 Tablet (768px)
-          </button>
-          <button class="device-btn" onclick="setDeviceWidth('375px', this)">
-            📱 Mobile (375px)
-          </button>
+
+        <div class="device-toolbar">
+          <div class="bg-sim-group">
+            <span class="bg-sim-label">Fondo</span>
+            <div class="bg-sim-btns">
+              <button onclick="setPreviewBg('#111111', this)" class="bg-sim-btn active" style="background: #111111;" title="Fondo oscuro" aria-label="Fondo oscuro"></button>
+              <button onclick="setPreviewBg('#ffffff', this)" class="bg-sim-btn" style="background: #ffffff;" title="Fondo claro" aria-label="Fondo claro"></button>
+              <button onclick="setPreviewBg('transparent', this)" class="bg-sim-btn" style="background: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(-45deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(-45deg, transparent 75%, #ccc 75%); background-size: 6px 6px; background-position: 0 0, 0 3px, 3px -3px, -3px 0;" title="Transparencia" aria-label="Fondo transparente"></button>
+            </div>
+          </div>
+
+          <div class="device-btns">
+            <button class="device-btn active" onclick="setDeviceWidth('100%', this)">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              Desktop
+            </button>
+            <button class="device-btn" onclick="setDeviceWidth('768px', this)">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+              Tablet
+            </button>
+            <button class="device-btn" onclick="setDeviceWidth('375px', this)">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+              Mobile
+            </button>
+          </div>
         </div>
       </div>
 
@@ -1327,27 +1412,32 @@
         </div>
       </div>
 
-      <!-- Code generation section -->
-      <div class="code-section">
+      <div class="code-section" id="code-section">
         <div class="code-header">
           <div class="code-title">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
             </svg>
-            Código HTML Generado (Listo para SFCC)
+            Exportar para SFCC
+            <span class="code-title-tag">HTML listo</span>
           </div>
           <div class="code-actions">
             <button class="action-btn" onclick="downloadCode()">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
               </svg>
-              Descargar Archivo
+              Descargar
             </button>
             <button class="action-btn primary" id="copy-btn" onclick="copyCode()">
-              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
               </svg>
-              Copiar Código
+              Copiar código
+            </button>
+            <button class="action-btn collapse-btn" onclick="toggleCodeSection()" title="Minimizar editor" aria-label="Minimizar editor">
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+              </svg>
             </button>
           </div>
         </div>
@@ -1388,7 +1478,7 @@
       return `<!--
 Brand: Custom Countdown
 Version: Dynamic Generation
-Countdown ends: ${config.endDateStr} Z
+Countdown ends: ${config.isoDate}
 -->
 <div class="countdown-container" data-countdown-end="${config.isoDate}">
   <a class="countdown-link" 
@@ -2191,8 +2281,8 @@ Countdown ends: ${config.endDateStr} Z
         titleText: '¡YA LLEGA EL MUNDIAL!',
         endDate: '2026-06-11T17:30:00',
         expiredMsg: '¡La promoción ha finalizado!',
-        bgImage: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/1d3f9e49-3c69-4b4b-8d4a-0131cdcb7a59.png',
-        bgImageMobile: 'https://image.grupodabra.com/lib/fe37157175640478731176/m/1/d720e4d6-19cd-4dbd-949f-b2bc82829f94.png',
+        bgImage: 'https://bdtf-stg.my.commercecloud.salesforce.com/on/demandware.static/-/Sites-Dexter-Library/default/dw6eb7b5a1/Contador%20Mundial%202026/Contador%20Arranc%C3%B3%20el%20mundial.png',
+        bgImageMobile: 'https://bdtf-stg.my.commercecloud.salesforce.com/on/demandware.static/-/Sites-Dexter-Library/default/dwe8512f3f/Contador%20Mundial%202026/Contador%20mobile%20arranco%20el%20mundial.png',
         linkUrl: '/mundial',
         campaign: 'mundial-2026-dexter',
         source: 'banner-countdown',
@@ -2367,19 +2457,34 @@ Countdown ends: ${config.endDateStr} Z
       }
     }
 
+    function toLocalISOString(date) {
+      const tzo = -date.getTimezoneOffset();
+      const dif = tzo >= 0 ? '+' : '-';
+      const pad = num => String(num).padStart(2, '0');
+      return date.getFullYear() +
+        '-' + pad(date.getMonth() + 1) +
+        '-' + pad(date.getDate()) +
+        'T' + pad(date.getHours()) +
+        ':' + pad(date.getMinutes()) +
+        ':' + pad(date.getSeconds()) +
+        dif + pad(Math.floor(Math.abs(tzo) / 60)) +
+        ':' + pad(Math.abs(tzo) % 60);
+    }
+
     // Generate output HTML
     function getConfiguration() {
       const isTitleTmpl = document.getElementById('tmpl-title').checked;
       const dateVal = document.getElementById('end-date').value;
       
-      // Convert local date input to UTC ISO String
-      let isoDate = '2026-06-11T17:30:00Z';
-      let endDateStr = '2026-06-11 17:30:00';
+      // Convert local date input to local ISO String with offset
+      const defaultDate = new Date('2026-06-16T22:00:00');
+      let isoDate = toLocalISOString(defaultDate);
+      let endDateStr = isoDate.replace('T', ' ').substring(0, 19);
       if (dateVal) {
         const localDate = new Date(dateVal);
-        isoDate = localDate.toISOString();
+        isoDate = toLocalISOString(localDate);
         // Friendly formatted date for comments
-        endDateStr = localDate.toISOString().replace('T', ' ').substring(0, 19);
+        endDateStr = isoDate.replace('T', ' ').substring(0, 19);
       }
 
       return {
@@ -2472,6 +2577,13 @@ Countdown ends: ${config.endDateStr} Z
       doc.open();
       
       // Build a wrapper document inside iframe to center the banner perfectly
+      let bgStyle = '';
+      if (currentPreviewBg === 'transparent') {
+        bgStyle = `background-image: linear-gradient(45deg, #181818 25%, transparent 25%), linear-gradient(-45deg, #181818 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #181818 75%), linear-gradient(-45deg, transparent 75%, #181818 75%); background-size: 12px 12px; background-position: 0 0, 0 6px, 6px -6px, -6px 0; background-color: #0d0d0d;`;
+      } else {
+        bgStyle = `background: ${currentPreviewBg};`;
+      }
+
       const iframeHTML = `<!DOCTYPE html>
 <html>
 <head>
@@ -2479,7 +2591,7 @@ Countdown ends: ${config.endDateStr} Z
     body {
       margin: 0;
       padding: 20px;
-      background: #111;
+      ${bgStyle}
       display: flex;
       justify-content: center;
       align-items: center;
@@ -2508,6 +2620,21 @@ Countdown ends: ${config.endDateStr} Z
       saveState(config);
     }
 
+    // Global state for preview background
+    let currentPreviewBg = '#111111';
+
+    function setPreviewBg(color, btn) {
+      currentPreviewBg = color;
+      document.querySelectorAll('.bg-sim-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      triggerUpdate();
+    }
+
+    function toggleCodeSection() {
+      const section = document.getElementById('code-section');
+      section.classList.toggle('collapsed');
+    }
+
     // Toast utility
     function showToast(message) {
       const toast = document.getElementById('toast');
@@ -2533,8 +2660,8 @@ Countdown ends: ${config.endDateStr} Z
           </svg>
           ¡Copiado!
         `;
-        btn.style.background = '#10b981'; // vibrant green success color
-        btn.style.borderColor = '#10b981';
+        btn.style.background = '#00C4A7';
+        btn.style.borderColor = '#00C4A7';
         btn.style.color = '#ffffff';
         
         setTimeout(() => {
@@ -2624,7 +2751,19 @@ Countdown ends: ${config.endDateStr} Z
     }
 
     // DOM Setup and listeners
+    function updateStudioClock() {
+      const el = document.querySelector('.studio-mark__digits');
+      if (!el) return;
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      el.textContent = h + ':' + m + ':' + s;
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
+      updateStudioClock();
+      setInterval(updateStudioClock, 1000);
       setInitialDate();
       
       // Attach listeners to input changes
